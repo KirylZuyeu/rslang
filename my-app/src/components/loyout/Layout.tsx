@@ -1,17 +1,14 @@
 import { Outlet} from 'react-router-dom';
-import { props } from '../../store';
 import Footer from '../footer/Footer'
 import Header from '../header/header'
 
 
-function Layout(props: props) {
-	console.log(props);
-	
+function Layout() {	
     return (   
         <div className="app">
-            <Header link = { props.link}/>            
+            <Header/>            
             <Outlet/>
-            <Footer dev = {props.dev}/>
+            <Footer/>
         </div>    
     )
 }

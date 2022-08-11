@@ -1,5 +1,4 @@
 import MainPage from './pages/main-page/main-page';
-import { link, develops } from './store'; 
 import './App.css';
 import { Route,	BrowserRouter, Routes} from 'react-router-dom';
 import Oleg from './pages/Team/Oleg';
@@ -21,10 +20,10 @@ function App() {
   return (
 		<BrowserRouter>			
 		  <Routes>
-				<Route path='/' element={<Layout link={link} dev={develops}/>}>
+				<Route path='/' element={<Layout/>}>
 					<Route index  element={<MainPage/>}/>
 					<Route path='/team' element = { <Team/>}/>
-					<Route path='/learn_words' element = { <Learn/>}/>
+					<Route path='/learn-words' element = { <Learn/>}/>
 					<Route path='/statistics' element = { <Statistic/>}/>
 					<Route path='/dictionary' element = { <Dictionary/>}/>
 					<Route path='/team/Oleg' element = { <Oleg/>}/>
@@ -33,7 +32,7 @@ function App() {
 					<Route path='/mini-game' element = { <Game/>}/>
 					<Route path="/mini-game/sprint" element={<Sprint/>}/>
 					<Route path="/mini-game/audio-call" element={<AudioCall/>}/>					
-					<Route path="/come_in" element={<Authorization/>}/>					
+					<Route path="/come-in" element={<Authorization/>}/>					
 			  </Route>
 			</Routes>
 				

@@ -1,0 +1,36 @@
+.footer{
+	display: flex;
+	min-height: 80px;
+	justify-content: space-around;
+	align-items: center;
+	padding: 0 15px;background-color: aquamarine;
+}
+
+.git-link{
+	text-decoration: none;
+	margin-left: 40px;	
+	position: relative;
+}
+
+.git-link::before{
+	content: '';
+	background: url(../../images/svg/git.svg);
+	background-repeat: no-repeat;
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	right: 35px;
+	top: -5px;
+}
+
+.rss-year{
+	display: flex;
+	align-items: center;
+}
+
+.rss{
+	background: url(../../images/svg/rs_school_js.svg);
+	background-repeat: no-repeat;
+	width: 150px;
+	height: 50px;
+}

@@ -1,0 +1,11 @@
+.main{
+	background: url(../../images/jpg/4013028-988a57.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	min-height: 75vh;	
+}
+
+.main-title{
+	padding-top: 30px;
+	margin-top: 0;
+}

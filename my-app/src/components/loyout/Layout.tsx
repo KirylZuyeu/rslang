@@ -1,6 +1,5 @@
-import { Outlet} from 'react-router-dom'
-import { props } from '../../App'
-import React from 'react';
+import { Outlet} from 'react-router-dom';
+import { props } from '../../store';
 import Footer from '../footer/Footer'
 import Header from '../header/header'
 

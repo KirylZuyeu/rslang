@@ -1,5 +1,7 @@
+import "./autorization.css";
+
 export default function Authorization() {
 	return (
-		<div>authorization</div>
+		<div className="autorization">authorization</div>
 	)
 }

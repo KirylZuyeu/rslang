@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Links } from "../../App";
+import { Links } from "../../store";
 import "./header.css";
 
 

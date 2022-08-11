@@ -1,6 +1,5 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import AudioCall from "../components/mini-game/audio-call";
-import Sprint from "../components/mini-game/sprint";
+import "./game.css";
 
 export default function Game() {
 	return (

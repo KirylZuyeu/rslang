@@ -1,0 +1,24 @@
+.call{
+	min-height: 75vh;
+	background: url(../../../images/gif/game.gif);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.call-title{
+	margin: 0;
+	padding-top: 20px;
+}
+
+.call-game{
+	min-height: 75vh;
+	background: url(../../../images/gif/game.gif);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.start-call{
+	padding: 5px;
+}

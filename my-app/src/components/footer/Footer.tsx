@@ -3,6 +3,7 @@ import { Dev } from "../../store";
 import "./footer.css";
 
 function Footer(props: Dev) {
+	const dev = props.dev;
 	return (
 		<div className="footer">
 			<div className="rss-year">
@@ -10,7 +11,7 @@ function Footer(props: Dev) {
 				<p className="year">2022</p>
 			</div>
 			<nav>
-				{props.dev.map((el, i) =><Link key={i} className="git-link" to={`/team/${el}`}>{`${el}`}</Link>)}
+				{dev.map((el, i) =><Link key={i} className="git-link" to={`/team/${el}`}>{`${el}`}</Link>)}
 			</nav>
 		</div>
 	)

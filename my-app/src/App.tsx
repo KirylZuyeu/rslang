@@ -7,7 +7,7 @@ import Layout from './components/loyout/Layout';
 import Team from './components/team/team';
 import Game from './pages/Game/game';
 import Sprint from './components/mini-game/sprint';
-import AudioCall from './components/mini-game/audio-call';
+import AudioCall from './components/mini-game/call/audioCall';
 import Authorization from './pages/authorization/authorization';
 import Kiryl from './pages/Team/Kiryl';
 import Katya from './pages/Team/Katya';

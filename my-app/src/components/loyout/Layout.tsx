@@ -5,6 +5,8 @@ import Header from '../header/header'
 
 
 function Layout(props: props) {
+	console.log(props);
+	
     return (   
         <div className="app">
             <Header link = { props.link}/>            

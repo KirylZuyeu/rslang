@@ -1,7 +1,9 @@
 import "./dictionary.css";
 
-export default function Dictionary() {
+function Dictionary() {
 	return (
 		<div className="dictionary">Dictionary</div>
 	)
 }
+
+export default Dictionary

@@ -1,0 +1,22 @@
+.header{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: rgb(122, 174, 186);
+	padding: 0 20px;
+}
+
+.header-title{
+	margin-right: 20px;	
+}
+
+.title{
+	color: darkmagenta;
+	text-decoration: none;
+}
+
+.nav-link{
+	margin-left: 15px;
+	color: darkmagenta;
+	text-decoration: none;
+}

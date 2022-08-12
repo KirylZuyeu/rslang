@@ -1,9 +1,9 @@
-import "./main.css";
+import styles from "./main.module.css";
 
 function Main() {
 	return (
-		<div className="main">
-			<h2 className="main-title">Расширяй словарный запас интересно, вместе с RSLang</h2>
+		<div className={styles.main}>
+			<h2 className={styles.main_title}>Расширяй словарный запас интересно, вместе с RSLang</h2>
 		</div>
 	)
 }

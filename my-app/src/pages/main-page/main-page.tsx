@@ -1,16 +1,10 @@
 import Main from "../../components/main/main";
-import './main-page.css';
+import styles from  './main-page.module.css';
 
-
-
-function MainPage() {
-	
-	
+function MainPage() {	
   return (
-    <div className="wrapper">	
-			
-			<Main/>
-							     
+    <div className={styles.wrapper}>				
+			<Main/>							     
     </div>
   );
 }

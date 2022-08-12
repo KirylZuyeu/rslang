@@ -1,17 +1,17 @@
 .call{
 	min-height: 75vh;
-	background: url(../../../images/gif/game.gif);
+	background: url(../../../images/gif/7RQk.gif);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
 }
 
-.call-title{
+.call_title{
 	margin: 0;
 	padding-top: 20px;
 }
 
-.call-game{
+.start_call{
 	min-height: 75vh;
 	background: url(../../../images/gif/game.gif);
 	background-repeat: no-repeat;
@@ -19,6 +19,6 @@
 	background-position: center;
 }
 
-.start-call{
+.btn_start_call{
 	padding: 5px;
 }

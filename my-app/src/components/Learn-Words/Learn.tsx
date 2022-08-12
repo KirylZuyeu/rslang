@@ -1,7 +1,7 @@
-import "./learn.css";
+import styles from "./learn.module.css";
 
 export default function Learn() {
 	return (
-		<div className="learn">Learn</div>
+		<div className={styles.learn}>Learn</div>
 	)
 }

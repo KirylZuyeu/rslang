@@ -1,8 +1,10 @@
-import "./dictionary.css";
+import style from "./dictionary.module.css";
 
 function Dictionary() {
+	console.log(style);
+	
 	return (
-		<div className="dictionary">Dictionary</div>
+		<div className={style.dictionary}>Dictionary</div>
 	)
 }
 

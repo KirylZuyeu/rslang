@@ -1,5 +1,4 @@
 import MainPage from './pages/main-page/main-page';
-import './App.css';
 import { Route,	BrowserRouter, Routes} from 'react-router-dom';
 import Oleg from './pages/Team/Oleg';
 import Layout from './components/loyout/Layout';

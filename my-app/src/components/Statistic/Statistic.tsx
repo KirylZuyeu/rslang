@@ -1,7 +1,7 @@
-import "./statistic.css";
+import styles from "./statistic.module.css";
 
 export default function Statistic() {
 	return (
-		<div className="statistics">Statistic</div>
+		<div className={styles.statistics}>Statistic</div>
 	)
 }

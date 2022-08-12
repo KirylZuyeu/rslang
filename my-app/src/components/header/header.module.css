@@ -6,7 +6,7 @@
 	padding: 0 20px;
 }
 
-.header-title{
+.header_title{
 	margin-right: 20px;	
 }
 
@@ -15,7 +15,7 @@
 	text-decoration: none;
 }
 
-.nav-link{
+.nav_link{
 	margin-left: 15px;
 	color: darkmagenta;
 	text-decoration: none;

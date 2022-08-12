@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import styles from './sprint.module.css';
 
 function Sprint() {
 	

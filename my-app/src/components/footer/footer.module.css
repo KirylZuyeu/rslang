@@ -6,13 +6,13 @@
 	padding: 0 15px;background-color: aquamarine;
 }
 
-.git-link{
+.git_link{
 	text-decoration: none;
 	margin-left: 40px;	
 	position: relative;
 }
 
-.git-link::before{
+.git_link::before{
 	content: '';
 	background: url(../../images/svg/git.svg);
 	background-repeat: no-repeat;
@@ -23,7 +23,7 @@
 	top: -5px;
 }
 
-.rss-year{
+.rss_year{
 	display: flex;
 	align-items: center;
 }

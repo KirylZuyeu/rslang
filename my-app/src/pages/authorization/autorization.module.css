@@ -3,4 +3,77 @@
 	min-height: 75vh;
 	width: 100%;background-size: cover;
 	background-repeat: no-repeat;
+	padding-top: 30px;
+}
+
+.wrapper{
+	width: 30%;
+	margin: 0 auto;	
+	padding: 0;
+	background: rgb(230, 230, 230);
+}
+
+.autoriz_varia{
+  display: flex;
+	width: 100%;
+	min-height: 40px;
+	cursor: pointer;
+}
+
+.autoriz_varia_L{
+	width: 50%;
+	background: #fff;
+}
+
+.autoriz_varia_R{	
+	width: 50%;	
+	background: #fff;
+}
+
+.autoriz_varia_L_active,
+.autoriz_varia_R_active{
+	width: 50%;
+	background: rgb(230, 230, 230);
+}
+
+
+
+.input,
+.register{
+	padding: 10px;
+}
+
+.form_name,
+.form_email,
+.form_pasword,
+.form_repeat_pasword{
+	width: 100%;
+  display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 50px;
+}
+
+.form_name_lable,
+.form_email_lable,
+.form_pasword_lable,
+.form_repeat_pasword_lable{
+	margin: 0 auto 0 5px;
+	font-size: 1.2rem;
+}
+
+.form_name_text,
+.form_email_text,
+.form_pasword_text,
+.form_repeat_pasword_text{
+	width: 98%;
+	height: 100%;
+	border: none;
+}
+
+.form_btn{
+	width: 100%;
+	padding: 5px;
+	cursor: pointer;
+	margin-top: 20px;
 }

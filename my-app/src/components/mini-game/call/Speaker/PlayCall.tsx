@@ -25,7 +25,7 @@ export type PropsWord = {
 }
 
 let arr = [] as number[];
-export default function Speaker(props: PropsWord){
+export default function PlayCall(props: PropsWord){
 	
 	console.log(props);
 	const words = props.words			
@@ -70,7 +70,7 @@ export default function Speaker(props: PropsWord){
 
 	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		console.log((e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el=>
-			 (el as HTMLElement).style.background = 'transparent'));		
+			 (el as HTMLElement).style.background = 'whitesmoke'));		
 		if(know){
 			setResultF(resultFalse + 1);
 			setArrF(arr => [...arr, count]);

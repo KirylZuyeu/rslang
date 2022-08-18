@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './result.module.css';
-import { Word } from './Speaker/Speaker';
+import { Word } from './Speaker/PlayCall';
 
 type Prop = {	
 	resTrue: number

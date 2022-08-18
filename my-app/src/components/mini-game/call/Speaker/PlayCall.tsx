@@ -25,15 +25,14 @@ export type PropsWord = {
 }
 
 let arr = [] as number[];
-export default function PlayCall(props: PropsWord){
-	
-	console.log(props);
+export default function PlayCall(props: PropsWord) {
 	const words = props.words			
 	const [count, setCount] = useState(0);
 	const [resultTrue, setResultT] = useState(0);	
 	const [arrTrue, setArrT] = useState([] as number[]);	
 	const [resultFalse, setResultF] = useState(0);		
 	const [arrFalse, setArrF] = useState([] as number[]);		
+	const [a, setA] = useState(true);		
 						
 	const [know, setKnow] = useState(true);		
 
@@ -53,13 +52,12 @@ export default function PlayCall(props: PropsWord){
 
 	const playWord =  () => {
 		if(words.length > count ){
-		const audio = new Audio(`https://react-learnwords-example.herokuapp.com/${words[count].audio}`);
-		audio.play();
+			new Audio(`https://react-learnwords-example.herokuapp.com/${words[count].audio}`).play();
 		}
 	}		
 
 	useEffect(()=>{		
-			playWord();		
+		playWord();		
 
 	},[count])
 
@@ -69,8 +67,8 @@ export default function PlayCall(props: PropsWord){
 	}	
 
 	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		console.log((e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el=>
-			 (el as HTMLElement).style.background = 'whitesmoke'));		
+		(e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el =>
+			(el as HTMLElement).style.background = 'whitesmoke');		
 		if(know){
 			setResultF(resultFalse + 1);
 			setArrF(arr => [...arr, count]);
@@ -89,8 +87,7 @@ export default function PlayCall(props: PropsWord){
 			}else{
 				setResultF(resultFalse + 1);
 				setArrF(arr => [...arr, count]);
-				(e.target as HTMLButtonElement).style.background = '#ff0000';	
-					
+				(e.target as HTMLButtonElement).style.background = '#ff0000';						
 			}		
 			setKnow(false);
 		}
@@ -101,7 +98,7 @@ export default function PlayCall(props: PropsWord){
 		<div className={styles.speaker_wrapper}>
 			{ words.length > count
 			? <div className={styles.speaker_play}>
-				<Sppeaker playWord={playWord} />
+					<Sppeaker playWord={playWord} />
 				<div className={styles.btns_speacer}>
 					{(arr as number[]).map(el => <button key={words[el].id} className={styles.btn} onClick={(e) =>
 						 checkWord(e ,words[el].id)}>{words[el].wordTranslate}</button>)}

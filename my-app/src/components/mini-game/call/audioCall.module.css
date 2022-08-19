@@ -11,12 +11,14 @@
 	padding-top: 20px;
 }
 
-.start_call{
+.play_call{
 	min-height: 75vh;
 	background: url(../../../images/gif/game.gif);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	display: flex;
+	justify-content: center;
 }
 
 .btn_start_call{

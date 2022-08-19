@@ -1,5 +1,3 @@
-import { addWords } from "./functionality/api"
-
 export type World = {
 		length: number	
     "id": "string",

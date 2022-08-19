@@ -6,12 +6,13 @@ import Team from './components/team/team';
 import Game from './pages/Game/game';
 import Sprint from './components/mini-game/sprint';
 import AudioCall from './components/mini-game/call/audioCall';
-import Authorization from './pages/authorization/authorization';
+
 import Kiryl from './pages/Team/Kiryl';
 import Katya from './pages/Team/Katya';
 import Learn from './components/Learn-Words/Learn';
 import Statistic from './components/Statistic/Statistic';
 import Dictionary from './components/Dictionary/Dictionary';
+import Autorization from './pages/authorization/autorization';
 
 
 
@@ -31,7 +32,7 @@ function App() {
 					<Route path='/mini-game' element = { <Game/>}/>
 					<Route path="/mini-game/sprint" element={<Sprint/>}/>
 					<Route path="/mini-game/audio-call" element={<AudioCall/>}/>					
-					<Route path="/come-in" element={<Authorization/>}/>					
+					<Route path="/come-in" element={<Autorization />} />					
 			  </Route>
 			</Routes>
 				

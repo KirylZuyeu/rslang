@@ -26,7 +26,10 @@ export type PropsWord = {
 
 let arr = [] as number[];
 export default function PlayCall(props: PropsWord) {
-	const words = props.words			
+	const words = props.words
+	console.log('====================================');
+	console.log(words);
+	console.log('====================================');			
 	const [count, setCount] = useState(0);
 	const [resultTrue, setResultT] = useState(0);	
 	const [arrTrue, setArrT] = useState([] as number[]);	
@@ -59,7 +62,7 @@ export default function PlayCall(props: PropsWord) {
 	useEffect(()=>{		
 		playWord();		
 
-	},[count])
+	}, [words, count])
 
 	if(words.length > count && know ){
 		let array = shuffle(rndNumbers());

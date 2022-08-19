@@ -1,14 +1,14 @@
 import styles from "./audioCall.module.css";
 import { useEffect, useState } from "react";
 import PlayCall from "./Speaker/PlayCall";
-import { addWords } from "../../../functionality/api";
+import { getWords } from "../../../functionality/api";
 
 function AudioCall() {
 	const [error, setError] = useState(null);
 	const [isLoaded, setIsLoaded] = useState(false);
-	const [words, setItems] = useState([]);
+	const [words, setWords] = useState([]);
 	const [start, setStart] = useState(true);
-	const [num, setNum] = useState(0);
+	const [num, setNum] = useState(-1);
 	const levels = [0, 1, 2, 3, 4, 5];
 
 
@@ -17,32 +17,27 @@ function AudioCall() {
 		// document.title = 'играем в Аудио вызов';
 		console.log(num);
 
-		const res = addWords(num, 1)
+		const res = getWords(num, 1)
 		res.then(res => res.json())
 			.then(
 				(result) => {
 					setIsLoaded(true);
-					setItems(result);
-
-
+					setWords(result);
 				},
 				(error) => {
 					setIsLoaded(true);
 					setError(error);
 				}
-			)
-		console.log('====================================');
-		console.log('start', start);
-		console.log('level', num);
-		console.log('====================================');
+		)
 	}, [num]);
 
 
 	if (error) {
 		return <div>Ошибка: {error}</div>;
-	} else if (!isLoaded) {
+	}
+	if (!isLoaded) {
 		return <div>Загрузка...</div>;
-	} else {
+	} 
 	return (
 		<div className={styles.call}>
 			{start
@@ -62,10 +57,7 @@ function AudioCall() {
 		</div>
 			}
 		</div>
-
-
 	)
-	}
 }
 
 export default AudioCall

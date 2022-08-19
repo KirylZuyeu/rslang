@@ -26,9 +26,9 @@ export default function Modal (props:ModalType) {
                     {props.totalResult? <h1>Total result: {props.totalResult}</h1> : null}
                     <div className={styles.gameResult}>
                         <h4 className={styles.headingMistakes}>Ошибок: {props.arrayMistaken.length}</h4>
-                        {props.arrayMistaken.map(el => <ModalItem obj={findObjectInBase(props.base, el)}/>)}
+                        {props.arrayMistaken.map((el, i) => <ModalItem key={i} obj={findObjectInBase(props.base, el)}/>)}
                         <h4 className={styles.headingRight}>Знаю: {props.arrayRight.length}</h4>
-                        {props.arrayRight.map(el=> <ModalItem obj={findObjectInBase(props.base, el)}/>)}                        
+                        {props.arrayRight.map((el, i)=> <ModalItem key={i} obj={findObjectInBase(props.base, el)}/>)}                        
                         <button  onClick={()=> props.func(false)}>Close modal</button>
                     </div>
                 </div>

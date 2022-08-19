@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Modal from '../../sprint/modal/Modal';
 import ResultCall from '../ResultCall';
 import styles from './speaker.module.css';
 import Sppeaker from './Sppeaker';
@@ -26,17 +27,16 @@ export type PropsWord = {
 
 let arr = [] as number[];
 export default function PlayCall(props: PropsWord) {
-	const words = props.words
+	const words = props.words;
+
 	console.log('====================================');
 	console.log(words);
-	console.log('====================================');			
+
 	const [count, setCount] = useState(0);
-	const [resultTrue, setResultT] = useState(0);	
-	const [arrTrue, setArrT] = useState([] as number[]);	
-	const [resultFalse, setResultF] = useState(0);		
-	const [arrFalse, setArrF] = useState([] as number[]);		
-	const [a, setA] = useState(true);		
-						
+	const [arrTrue, setArrT] = useState([] as string[]);
+	const [arrFalse, setArrF] = useState([] as string[]);
+	const [modalOpen, setmodalOpen] = useState(true);
+
 	const [know, setKnow] = useState(true);		
 
 	const rndNumbers = () => {
@@ -69,12 +69,11 @@ export default function PlayCall(props: PropsWord) {
 		arr = array;	
 	}	
 
-	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
 		(e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el =>
 			(el as HTMLElement).style.background = 'whitesmoke');		
 		if(know){
-			setResultF(resultFalse + 1);
-			setArrF(arr => [...arr, count]);
+			setArrF(arr => [...arr, `${id}`]);
 		}
 		setKnow(true);
 		setCount(count +1);
@@ -84,12 +83,10 @@ export default function PlayCall(props: PropsWord) {
 	const checkWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {				
 		if(know){
 			if(id === words[count].id){
-				(e.target as HTMLButtonElement).style.background = '#00ff00';						
-				setResultT(resultTrue + 1);				
-				setArrT(arr => [...arr, count]);
+				(e.target as HTMLButtonElement).style.background = '#00ff00';				
+				setArrT(arr => [...arr, `${id}`]);
 			}else{
-				setResultF(resultFalse + 1);
-				setArrF(arr => [...arr, count]);
+				setArrF(arr => [...arr, `${id}`]);
 				(e.target as HTMLButtonElement).style.background = '#ff0000';						
 			}		
 			setKnow(false);
@@ -99,16 +96,18 @@ export default function PlayCall(props: PropsWord) {
 	
 	return (		
 		<div className={styles.speaker_wrapper}>
-			{ words.length > count
+			{words.length > count
 			? <div className={styles.speaker_play}>
 					<Sppeaker playWord={playWord} />
 				<div className={styles.btns_speacer}>
 					{(arr as number[]).map(el => <button key={words[el].id} className={styles.btn} onClick={(e) =>
 						 checkWord(e ,words[el].id)}>{words[el].wordTranslate}</button>)}
 				</div>
-				<button className={styles.btn_next} onClick={(e) => getNextWord(e)}>{ know ? `Не знаю`: count !== 19
+					<button className={styles.btn_next} onClick={(e) => getNextWord(e, words[count].id)}>{know ? `Не знаю` : count !== 19
 				? `Следующее слово`: 'Результат'}</button></div>
-			: <ResultCall resTrue={resultTrue} arrTrue={arrTrue} resFalse={resultFalse} arrFalse={arrFalse} words={words}/>}
+				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrTrue} func={setmodalOpen} /> : null}
 		</div>			
 	)		
 }
+
+{/*  */ }

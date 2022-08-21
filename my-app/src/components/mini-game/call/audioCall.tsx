@@ -15,14 +15,19 @@ function AudioCall() {
 
 	useEffect(() => {
 		// document.title = 'играем в Аудио вызов';
-		console.log(num);
-
 		const res = getWords(num, 1)
 		res.then(res => res.json())
 			.then(
 				(result) => {
+					let res
+					if (result.length > 10) {
+						res = result.slice(0, 10);
+					} else {
+						res = result;
+					}
+
 					setIsLoaded(true);
-					setWords(result);
+					setWords(res);
 				},
 				(error) => {
 					setIsLoaded(true);
@@ -31,12 +36,15 @@ function AudioCall() {
 		)
 	}, [num]);
 
-
+	useEffect(() => {
+		console.log(start);
+		console.log('===============ttttt==');
+	}, [start])
 	if (error) {
 		return <div>Ошибка: {error}</div>;
 	}
 	if (!isLoaded) {
-		return <div>Загрузка...</div>;
+		return <div className={styles.call}>Загрузка...</div>;
 	} 
 	return (
 		<div className={styles.call}>
@@ -44,18 +52,15 @@ function AudioCall() {
 				?
 			<div className={styles.before_game}>
 					<h2 className={styles.call_title}>Аудиовызов</h2>
-					<h4>Эта игра улучшает восприятие английских слов на слух</h4>
+					<h4 className={styles.call_title}>Эта игра улучшает восприятие английских слов на слух</h4>
 					<div className={styles.btn_levels}>
 						{levels.map((el, i) => <button key={i} onClick={() => { setNum(el); setStart(false) }} className={styles.btn_start_call}>Уровень игры{el + 1}</button>)}
 					</div>
 				</div>
-				:
-				<div className={styles.play_call}>            
-					<PlayCall words={words} /> 					
-				<div className={styles.btns_play_call}>
-				</div>
-		</div>
+				:				            
+				<PlayCall words={words} fu={setStart} />				
 			}
+
 		</div>
 	)
 }

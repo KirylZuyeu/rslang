@@ -4,11 +4,15 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .call_title{
 	margin: 0;
-	padding-top: 20px;
+	margin: 10px 0 20px;
+	color: black;
 }
 
 .play_call{

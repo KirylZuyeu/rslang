@@ -1,7 +1,7 @@
 import Circle from './Circle';
 import styles from './sprint.module.css';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import base from './base.json';
 import Timer from './Timer';
 import Modal from './modal/Modal';
@@ -38,15 +38,21 @@ function getRandomNumber(n:number) {
 
 const arrUsedNumbers = [] as number[];
 
-function changeStateObject(objChanged:IndexWord, setIndex:(value: React.SetStateAction<IndexWord>) => void) {
-  const numberRandom = getRandomNumber(40);
+function changeStateObject(objChanged:IndexWord, setIndex:(value: React.SetStateAction<IndexWord>) => void, base:Base[], func:Dispatch<SetStateAction<boolean>>) {
+  const numberRandom = getRandomNumber(base.length);
   if (!arrUsedNumbers.includes(numberRandom)) {
     arrUsedNumbers.push(numberRandom);
     const numberRandom2 = getRandomNumber(2);  
     objChanged.word = numberRandom;  
     numberRandom2 === 0? objChanged.translatedWord = getRandomNumber(40) : objChanged.translatedWord = numberRandom; 
     return setIndex(objChanged)
-  } else {changeStateObject(objChanged, setIndex)}  
+  } else {
+    if(arrUsedNumbers.length === base.length) {
+      func(true);
+      return;
+    }
+    changeStateObject(objChanged, setIndex, base, func)
+  }  
 }
 
 function compaireWords(index:number, wordTranslatedInCard:string) {
@@ -117,7 +123,7 @@ function GameSprint(props:Props) {
               <button
                 className={styles.btnStart} 
                 onClick={()=> {
-                  changeStateObject(objChanged, setIndex);
+                  changeStateObject(objChanged, setIndex, props.base, setflagModal);
                   return resultLearningWord(currentIncrease, false);
                 }}>
                 Неверно
@@ -125,7 +131,7 @@ function GameSprint(props:Props) {
               <button
                 className={styles.btnStart} 
                 onClick={()=> {
-                  changeStateObject(objChanged, setIndex);
+                  changeStateObject(objChanged, setIndex, props.base, setflagModal);
                   return resultLearningWord(currentIncrease, true);
                   }}>
                 Верно

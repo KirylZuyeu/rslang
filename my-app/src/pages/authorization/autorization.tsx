@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
+import { createUser, signIn } from '../../functionality/api';
 import styles from "./autorization.module.css";
 
 type FormValues = {
@@ -12,18 +13,37 @@ type FormValues = {
 export default function Autorization() {
 	const { register, formState: { errors }, handleSubmit, reset, watch } = useForm<FormValues>({ mode: 'onBlur' })
 	const [isAvtorize, setisAvtorize] = useState(false);
+	const [response, setResponse] = useState('');
 	const password = useRef({});
+
 	password.current = watch("Password", "");
 
 	function onSubmitReg(data: FormValues) {
 		console.log(data);
+
+		createUser({
+			name: data.Name,
+			email: data.Email,
+			password: data.Password
+		}).then(result => console.log(result))
 		reset()
 	}
 
 	function onSubmitIn(data: FormValues) {
-		console.log(data);
+		signIn({
+			email: data.Email,
+			password: data.Password
+		})
+			.then(result => setResponse(result))
+			.catch(err => console.log(err))
 		reset()
 	}
+
+	useEffect(() => {
+		if (response.length !== 0) {
+			console.log(response);
+		}
+	})
 
 	let variantL = 'autoriz_varia_L';
 	let variantR = 'autoriz_varia_R';

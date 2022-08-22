@@ -114,7 +114,6 @@ export default function PlayCall(props: PropsWord) {
 					: <div className={styles.btns_reset}>
 						<button className={styles.btn_resetGame} onClick={() => props.fu(true)}>С начала</button>
 						<Link to={'/mini-game'} className={styles.btn_resetGame} >К списку игр</Link>
-
 					</div>}
 
 		</div>			

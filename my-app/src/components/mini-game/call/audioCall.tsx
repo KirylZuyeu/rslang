@@ -16,8 +16,7 @@ function AudioCall() {
 	useEffect(() => {
 		// document.title = 'играем в Аудио вызов';
 		const res = getWords(num, 1)
-		res.then(res => res.json())
-			.then(
+		res.then(
 				(result) => {
 					let res
 					if (result.length > 10) {

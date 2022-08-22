@@ -10,7 +10,7 @@ function Footer() {
 				<p className={styles.year}>2022</p>
 			</div>
 			<nav>
-				{develops.map((el, i) =><Link key={i} className={styles.git_link} to={`${el.link}`}>{`${el.name}`}</Link>)}
+				{develops.map((el, i) =><a key={i} className={styles.git_link} href={`${el.link}`}>{`${el.name}`}</a>)}
 			</nav>
 		</div>
 	)

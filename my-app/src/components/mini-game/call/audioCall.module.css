@@ -4,19 +4,25 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .call_title{
 	margin: 0;
-	padding-top: 20px;
+	margin: 10px 0 20px;
+	color: black;
 }
 
-.start_call{
+.play_call{
 	min-height: 75vh;
 	background: url(../../../images/gif/game.gif);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	display: flex;
+	justify-content: center;
 }
 
 .btn_start_call{

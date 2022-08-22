@@ -23,6 +23,10 @@
     margin-bottom: 20px;
 }
 
+.engWord {
+    font-weight: bold;
+}
+
 .iconAudio {
     background: url(../../../../images/jpg/dinamic.png);
 	background-repeat: no-repeat;

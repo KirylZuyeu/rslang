@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Modal from '../../sprint/modal/Modal';
 import Picture from './picture/Picture';
 import styles from './speackker/speaker.module.css';
@@ -24,7 +23,7 @@ export type Word = {
 
 export type PropsWord = {
 	words: Word[]
-	fu: (a: boolean) => void
+	fu: Dispatch<SetStateAction<boolean>>
 }
 
 let arr = [] as number[];
@@ -110,12 +109,9 @@ export default function PlayCall(props: PropsWord) {
 				</div>
 					<button className={styles.btn_next} onClick={(e) => getNextWord(e)}>{know ? `Не знаю` : count !== 19
 				? `Следующее слово`: 'Результат'}</button></div>
-				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrTrue} func={setmodalOpen} />
-					: <div className={styles.btns_reset}>
-						<button className={styles.btn_resetGame} onClick={() => props.fu(true)}>С начала</button>
-						<Link to={'/mini-game'} className={styles.btn_resetGame} >К списку игр</Link>
-					</div>}
-
+				: modalOpen ?
+				 <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrTrue} func={setmodalOpen} start={props.fu}/>
+					: null}
 		</div>			
 	)		
 }

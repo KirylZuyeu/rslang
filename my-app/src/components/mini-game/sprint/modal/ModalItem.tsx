@@ -13,7 +13,7 @@ export default function ModalItem(props: PropType) {
   return (
     <div className={styles.gameList}>
       <span className={styles.iconAudio} onClick={playAudio}></span>
-      <span>{props.obj.word}</span>
+      <span className={styles.engWord}>{props.obj.word}</span>
       <span>-</span>
       <span>{props.obj.wordTranslate}</span>
     </div>

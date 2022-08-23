@@ -15,6 +15,14 @@ type ChengeDataUser = {
 	password: string
 }
 
+export type RespSign = {
+	message: string
+	name: string
+	refreshToken: string
+	token: string
+	userId: string
+}
+
 //=================WORDS=================
 export const getWords = async (groupNumber: number, page: number) => (await fetch(`${words}?group=${groupNumber}&page=${page}`)).json();
 export const getWord = async (id: number) => (await fetch(`${words}/${id}`)).json();
@@ -94,9 +102,9 @@ export const getUsersAggregatedWord = async (userId: number, wordId: number) =>
 
 //================Users Statistic=======================
 
-export const getUserStatistic = async (id: number) => (await fetch(`${users}/${id}/statistics`)).json();
+export const getUserStatistic = async (id: string) => (await fetch(`${users}/${id}/statistics`)).json();
 
-export const changeUserStatistic = async (id: number) => 
+export const changeUserStatistic = async (id: string) => 
 	(await fetch(`${users}/${id}/statistics`, {
 		method: 'PUT',
 		body: JSON.stringify({

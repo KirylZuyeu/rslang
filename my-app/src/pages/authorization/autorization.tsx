@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
-import { createUser, signIn } from '../../functionality/api';
+import { createUser, RespSign, signIn } from '../../functionality/api';
 import styles from "./autorization.module.css";
 
 type FormValues = {
@@ -10,10 +10,13 @@ type FormValues = {
 	Repeat_Password: string
 }
 
+
+
 export default function Autorization() {
 	const { register, formState: { errors }, handleSubmit, reset, watch } = useForm<FormValues>({ mode: 'onBlur' })
 	const [isAvtorize, setisAvtorize] = useState(false);
-	const [response, setResponse] = useState('');
+	const [response, setResponse] = useState({} as RespSign);
+
 	const password = useRef({});
 
 	password.current = watch("Password", "");
@@ -40,10 +43,15 @@ export default function Autorization() {
 	}
 
 	useEffect(() => {
-		if (response.length !== 0) {
-			console.log(response);
+		if (response.name) {
+			localStorage.setItem(`${JSON.stringify(response)}`, JSON.stringify(response));
+
 		}
-	})
+	}, [response])
+
+
+	console.log(response);
+
 
 	let variantL = 'autoriz_varia_L';
 	let variantR = 'autoriz_varia_R';

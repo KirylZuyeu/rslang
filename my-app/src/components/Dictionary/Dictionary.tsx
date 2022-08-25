@@ -1,8 +1,6 @@
 import style from "./dictionary.module.css";
 
-function Dictionary() {
-	console.log(style);
-	
+function Dictionary() {	
 	return (
 		<div className={style.dictionary}>Dictionary</div>
 	)

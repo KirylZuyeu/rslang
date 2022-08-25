@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { createUser, RespSign, signIn } from '../../functionality/api';
 import styles from "./autorization.module.css";
@@ -10,9 +10,12 @@ type FormValues = {
 	Repeat_Password: string
 }
 
+type Props = {
+	fu: Dispatch<SetStateAction<boolean>>
+}
 
 
-export default function Autorization() {
+export default function Autorization(props: Props) {
 	const { register, formState: { errors }, handleSubmit, reset, watch } = useForm<FormValues>({ mode: 'onBlur' })
 	const [isAvtorize, setisAvtorize] = useState(false);
 	const [response, setResponse] = useState({} as RespSign);
@@ -44,8 +47,8 @@ export default function Autorization() {
 
 	useEffect(() => {
 		if (response.name) {
-			localStorage.setItem(`${JSON.stringify(response)}`, JSON.stringify(response));
-
+			localStorage.setItem('a', JSON.stringify(response));
+			props.fu(true)
 		}
 	}, [response])
 

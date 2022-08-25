@@ -13,14 +13,17 @@ import Statistic from './components/Statistic/Statistic';
 import Dictionary from './components/Dictionary/Dictionary';
 import Autorization from './pages/authorization/autorization';
 import Cabinet from './components/header/Cabinet/Cabinet';
+import { useState } from 'react';
 
 
 
 function App() {	
+	const [isavtorization, setIsavtorization] = useState(false)	
+
   return (
 		<BrowserRouter>			
 		  <Routes>
-				<Route path='/' element={<Layout/>}>
+				<Route path='/' element={<Layout isLogin={isavtorization} />}>
 					<Route index  element={<MainPage/>}/>
 					<Route path='/team' element = { <Team/>}/>
 					<Route path='/learn-words' element = { <Learn/>}/>
@@ -32,8 +35,8 @@ function App() {
 					<Route path='/mini-game' element = { <Game/>}/>
 					<Route path="/mini-game/sprint" element={<Sprint/>}/>
 					<Route path="/mini-game/audio-call" element={<AudioCall/>}/>					
-					<Route path="/come-in" element={<Autorization />} />					
-					<Route path="/cabinet" element={<Cabinet />} />					
+					<Route path="/come-in" element={<Autorization fu={setIsavtorization} />} />
+					<Route path="/cabinet" element={<Cabinet isLogin={isavtorization} fu={setIsavtorization} />} />					
 			  </Route>
 			</Routes>
 				

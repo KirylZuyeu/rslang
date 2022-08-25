@@ -66,6 +66,9 @@ function GameSprint(props:Props) {
   const [indexObj, setIndex] = useState({word:props.base.length - 1, translatedWord:props.base.length - 1} as IndexWord);
   const [points, setPoints] = useState(0);
   const [flagModal, setflagModal] = useState(false);
+  const [flagIncreasePoint, setFlagIncreasePoint] = useState(false);
+  let [rightAnswers, setRightAnswers] = useState(0);
+  const [seriaRightAnswers, setSeriaRightAnswers] = useState(0);
   const [mistakenWords, setmistakenWords] = useState([] as string[]);
   const [rightWords, setrightWords] = useState([] as string[]);
   const [currentIncrease, setCurrentIncrease] = useState(10);
@@ -81,38 +84,58 @@ function GameSprint(props:Props) {
     if (countLearnedWords > 2) {
       setCurrentIncrease(currentIncrease*2);
       setCountLearnedWords(countLearnedWords = 0);
-    }
+    }       
 
-    if(compaireWords(indexObj.word, wordTranslatedInCard, props.base)) {           
+    if(compaireWords(indexObj.word, wordTranslatedInCard, props.base)) {                 
       if(btn === false) {
         arrMistakenWords.push(idWordInCard);
         setmistakenWords(arrMistakenWords);        
         setCurrentIncrease(10);
+        setRightAnswers(0);
         increase = 0;
       }else{
       arrRightWords.push(idWordInCard);
       setrightWords(arrRightWords);
       setCountLearnedWords(countLearnedWords + 1);
+      setFlagIncreasePoint(true);
+      setTimeout(()=> {setFlagIncreasePoint(false)},1500);
+      setRightAnswers(rightAnswers += 1);    
       }
-    } else {      
+    } else { 
       if(btn === true) {
         arrMistakenWords.push(idWordInCard);
         setmistakenWords(arrMistakenWords);        
         setCurrentIncrease(10);
+        setRightAnswers(0);
         increase = 0;
       }else{
       arrRightWords.push(idWordInCard);
       setrightWords(arrRightWords);
       setCountLearnedWords(countLearnedWords + 1);
+      setFlagIncreasePoint(true);
+      setTimeout(()=> {setFlagIncreasePoint(false)},1000);
+      setRightAnswers(rightAnswers += 1);     
       }
     }
+    if(rightAnswers > seriaRightAnswers) {setSeriaRightAnswers(rightAnswers)}
     return setPoints(points + increase)
   }
 
-  return (    
-    <div className={styles.gameSprint}>      
-      <div className={styles.gameWrapper}>
+  // function updateStatistics(userID:string) {
+  //   const statistic = getUserStatistic(userID);
+  //   statistic.then(result => {
+  //     const optionalPrev = result.optional;
+      
+  //   })
+  // }
 
+  // if(flagModal) {updateStatistics()}
+
+  return (    
+    <div className={styles.gameSprint}>
+      <h3 className={styles.gameEnglishWord}>{seriaRightAnswers}</h3>      
+      <div className={styles.gameWrapper}>      
+      {flagIncreasePoint? <div className={styles.increasePoint}>+{currentIncrease}</div> : null}
       {flagModal ?
       <Modal func={setflagModal} arrayRight={rightWords} arrayMistaken={mistakenWords} base={props.base} totalResult={points} start={props.start}/>
       : null}
@@ -122,7 +145,7 @@ function GameSprint(props:Props) {
           <div className={styles.gameMarks}>
           <Circle n={3} count={countLearnedWords}/>
           </div>          
-          <h3 className={styles.gameEnglishWord}>{wordInCard}</h3>
+          <h3 className={styles.gameEnglishWord}>{wordInCard}</h3>          
           <h4 className={styles.gameRussianWord}>{wordTranslatedInCard}</h4>
           <div className={styles.gameButtons}>
               <button

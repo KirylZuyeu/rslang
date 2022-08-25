@@ -10,7 +10,7 @@ type ModalType = {
     arrayRight: string[],
     totalResult?: number,
     base: Base[],
-    start: Dispatch<SetStateAction<boolean>>
+	start: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Modal (props:ModalType) {

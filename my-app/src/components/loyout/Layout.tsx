@@ -3,11 +3,14 @@ import Footer from '../footer/Footer';
 import Header from '../header/header';
 import styles from '../../App.module.css';
 
+type Props = {
+	isLogin: boolean
+}
 
-function Layout() {	
+function Layout(props: Props) {	
     return (   
         <div className={styles.app}>
-            <Header/>            
+				<Header isLogin={props.isLogin} />            
             <Outlet/>
             <Footer/>
         </div>    

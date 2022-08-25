@@ -9,42 +9,37 @@ function AudioCall() {
 	const [words, setWords] = useState([]);
 	const [start, setStart] = useState(true);
 	const [num, setNum] = useState(-1);
-	const levels = [0, 1, 2, 3, 4, 5];
 
+
+	const levels = [0, 1, 2, 3, 4, 5];
 
 
 	useEffect(() => {
 		// document.title = 'играем в Аудио вызов';
 		const res = getWords(num, 1)
 		res.then(
-				(result) => {
-					let res
-					if (result.length > 10) {
-						res = result.slice(0, 10);
-					} else {
-						res = result;
-					}
-
-					setIsLoaded(true);
-					setWords(res);
-				},
-				(error) => {
-					setIsLoaded(true);
-					setError(error);
+			(result) => {
+				let res
+				if (result.length > 10) {
+					res = result.slice(0, 10);
+				} else {
+					res = result;
 				}
+				setIsLoaded(true);
+				setWords(res);
+			},
+			(error) => {
+				setError(error);
+			}
 		)
-	}, [num]);
+	}, [num])
 
-	useEffect(() => {
-		console.log(start);
-		console.log('===============ttttt==');
-	}, [start])
-	if (error) {
-		return <div>Ошибка: {error}</div>;
-	}
-	if (!isLoaded) {
-		return <div className={styles.call}>Загрузка...</div>;
-	} 
+
+
+
+
+
+
 	return (
 		<div className={styles.call}>
 			{start
@@ -56,8 +51,8 @@ function AudioCall() {
 						{levels.map((el, i) => <button key={i} onClick={() => { setNum(el); setStart(false) }} className={styles.btn_start_call}>Уровень игры{el + 1}</button>)}
 					</div>
 				</div>
-				:				            
-				<PlayCall words={words} fu={setStart} />				
+				: error ? <div>Ошибка: {error}</div> : !isLoaded || !words.length ? <div className={styles.call}>Загрузка...</div>
+					: <PlayCall words={words} fu={setStart} resetWords={setWords} />				
 			}
 
 		</div>
@@ -68,4 +63,9 @@ export default AudioCall
 
 
 
-
+// if (error) {
+// 	return <div>Ошибка: {error}</div>;
+// }
+// if (!isLoaded) {
+// 	return <div className={styles.call}>Загрузка...</div>;
+// } 

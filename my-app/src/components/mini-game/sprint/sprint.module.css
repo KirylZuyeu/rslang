@@ -115,3 +115,13 @@ h4 {
     margin: 5px;
     background-color: green;
 }
+
+.increasePoint {    
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    transition: 2s;
+}

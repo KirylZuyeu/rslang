@@ -19,6 +19,8 @@ type ChengeDataUser = {
 export const getWords = async (groupNumber: number, page: number) => (await fetch(`${words}?group=${groupNumber}&page=${page}`)).json();
 export const getWord = async (id: number) => (await fetch(`${words}/${id}`)).json();
 
+export const getWordsByGroup = async (groupNumber: number) => (await fetch(`${words}/group?group=${groupNumber}`)).json();
+
 //==================USERS================
 export const createUser = async (data: DataUser) => 
 	(await fetch(users, {

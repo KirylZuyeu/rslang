@@ -10,7 +10,8 @@ type ModalType = {
     arrayRight: string[],
     totalResult?: number,
     base: Base[],
-	start: Dispatch<SetStateAction<boolean>>
+	start: Dispatch<SetStateAction<boolean>>,
+    level?: Dispatch<SetStateAction<number>>
 }
 
 export default function Modal (props:ModalType) {
@@ -32,7 +33,7 @@ export default function Modal (props:ModalType) {
                         <h4 className={styles.headingRight}>Знаю: {props.arrayRight.length}</h4>
                         {props.arrayRight.map((el, i)=> <ModalItem key={i} obj={findObjectInBase(props.base, el)}/>)}                        
                         {/* <button  onClick={()=> props.func(false)}>Close modal</button> */}
-                        <button className={styles.btn_resetGame} onClick={() => props.start(true)}>С начала</button>
+                        <button className={styles.btn_resetGame} onClick={() => {props.start(true);if(props.level) {props.level(0)}}}>С начала</button>
                         <button className={styles.btn_resetGame}>
                         <Link to={'/mini-game'} className={styles.btn_link} onClick={()=> props.func(false)}>К списку игр</Link>
                         </button>

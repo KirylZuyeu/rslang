@@ -1,3 +1,5 @@
+import { number } from "prop-types";
+
 const url = 'https://rslang-be-server.herokuapp.com';
 
 const words = `${url}/words`;
@@ -13,21 +15,57 @@ type DataUser = {
 type ChengeDataUser = {
 	email: string,
 	password: string
+} 
+
+export type OptionStatistics = {
+	sprint: {
+		arrLearnedWords: string[] | never[]
+		arrFalse: string[] | never[]
+		arrRight: string[] | never[]
+		sumRight: number
+        sumAll: number
+		period: number
+	}
+	audioCall: {
+		arrLearnedWords: string[] | never[]
+		arrFalse: string[] | never[]
+		arrRight: string[] | never[]
+		sumRight: number
+        sumAll: number
+		period: number
+	}
+	book: { arrWords: string[] | never[] }
+	arrLearnedWords: {arr:string[]}
+	date: string
+	longTimeStatistic: {arr:never[]}
+}
+
+export const objStatisticZero = {
+	sprint: {
+		arrLearnedWords: [],
+		arrFalse: [],
+		arrRight: [],
+		sumRight: 0,
+        sumAll: 0,
+		period: 0
+	},
+	audioCall: {
+		arrLearnedWords: [],
+		arrFalse: [],
+		arrRight: [],
+		sumRight: 0,
+        sumAll: 0,
+		period: 0
+	},
+	book: { arrWords: [] },
+	arrLearnedWords: {arr:[]},
+	date: ' ',
+	longTimeStatistic: {arr:[]}
 }
 
 export type Statistic = {
 	learnedWords: number
-	sprint: {
-		arrFalse: string | never[]
-		arrRight: string | never[]
-		period: number
-	}
-	audioCall: {
-		arrFalse: string | never[]
-		arrRight: string | never[]
-		period: number
-	}
-	book: { arrWords: string | never[] }
+	optional: OptionStatistics
 }
 
 export type RespSign = {
@@ -93,9 +131,9 @@ export const getUserWords = async (id: string, token: string) => (await fetch(`$
 export const createUserWord = async (userId: string, wordId: string, group: string, token: string) => 
 	(await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'POST',
-		body: JSON.stringify({			
+		body: JSON.stringify({	
 			difficulty: group,
-			// optional: {} ?????
+			optional: 1
 		}),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json()
@@ -141,19 +179,25 @@ export const getUsersAggregatedWord = async (userId: string, wordId: string, tok
 
 //================Users Statistic=======================
 
+// export const getUserStatistic = async (id: string, token: string) => (await fetch(`${users}/${id}/statistics`, {
+// 	method: "GET",
+// 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+// })).json();
+
 export const getUserStatistic = async (id: string, token: string) => (await fetch(`${users}/${id}/statistics`, {
-	method: "GET",
+    method: 'GET',
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const changeUserStatistic = async (id: string, token: string, opt: Statistic) => 
-	(await fetch(`${users}/${id}/statistics`, {
+export const changeUserStatistic = async (id: string, token: string, num: number, opt: OptionStatistics) => 
+	await fetch(`${users}/${id}/statistics`, {
 		method: 'PUT',
-		body: JSON.stringify({				
-			optional: opt			
-		}),
+		body: JSON.stringify(
+			{'learnedWords': num,
+			'optional': opt}
+			),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-	})).json()
+	})
 
 //================Users Setting=======================
 

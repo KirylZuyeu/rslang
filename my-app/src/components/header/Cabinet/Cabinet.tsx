@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { getUserStatistic, getUser, RespSign, changeUserStatistic } from "../../../functionality/api";
+import { getUserStatistic, getUser, RespSign, changeUserStatistic, objStatisticZero, createUserWord, getUserWords } from "../../../functionality/api";
 import styles from "./cabinet.module.css";
 
 type Props = {
@@ -16,21 +16,6 @@ export default function Cabinet(props: Props) {
 
 	const a = 'hello a'.repeat(3)
 	console.log(a);
-
-	const option = {
-		learnedWords: 0,
-		sprint: {
-			arrFalse: [],
-			arrRight: [],
-			period: 0
-		},
-		audioCall: {
-			arrFalse: [],
-			arrRight: [],
-			period: 0
-		},
-		book: { arrWords: [] }
-	}
 
 	useEffect(() => {
 		const c = localStorage.getItem('a')
@@ -65,21 +50,20 @@ export default function Cabinet(props: Props) {
 			.then(res => console.log('stat', res))
 		// .catch(err => console.log(err))
 		console.log(sett);
+	}
 
+	function putWord() {
+		createUserWord(data.userId, '5e9f5ee35eb9e72bc21af4a2', 'easy', data.token);
+	}
+
+	function getWords() {
+		getUserWords(data.userId, data.token).then(res => console.log('getWord', res));
 	}
 
 	function changeStatistic() {
 		console.log('tokenn', data.token);
+		changeUserStatistic(data.userId, data.token, 0, objStatisticZero)}
 
-		const sett = changeUserStatistic(data.userId, data.token, option)
-			.then(res => console.log('stat', res))
-		// .catch(err => console.log(err))
-		console.log(sett);
-
-	}
-
-	console.log(data);
-	console.log(setting);
 	return (
 		<div className={styles.cabinet}>
 			<div className={styles.cabinet_wrapp}>
@@ -90,6 +74,8 @@ export default function Cabinet(props: Props) {
 					<button className={styles.btn_setting} onClick={user}>user</button>
 					<button className={styles.btn_setting} onClick={statistic}>Statistic</button>
 					<button className={styles.btn_setting} onClick={changeStatistic}>changeStatistic</button>
+					<button className={styles.btn_setting} onClick={getWords}>getWords</button>
+					<button className={styles.btn_setting} onClick={putWord}>putWord</button>
 				</> : null}
 			</div>
 		</div>

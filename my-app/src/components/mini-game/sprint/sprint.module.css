@@ -59,7 +59,8 @@
     color: orange;
 }
 
-h3, h4 {
+.gameEnglishWord,
+.gameRussianWord {
     color: white;
 }
 

@@ -147,22 +147,22 @@ export default function PlayCall(props: PropsWord) {
 
 	if (words.length <= count && modalOpen) {
 		console.log('openMod', allWords);
-		const option = {
-			learnedWords: 0,
-			sprint: {
-				arrFalse: ['2', '3', '4'],
-				arrRight: ['', ''],
-				period: 0
-			},
-			audioCall: {
-				arrFalse: [],
-				arrRight: [],
-				period: 0
-			},
-			book: { arrWords: [] }
-		} as Statistic
-		const v = changeUserStatistic(user.userId, user.token, option)
-		console.log('vvv', v);
+		// const option = {
+		// 	learnedWords: 0,
+		// 	sprint: {
+		// 		arrFalse: ['2', '3', '4'],
+		// 		arrRight: ['', ''],
+		// 		period: 0
+		// 	},
+		// 	audioCall: {
+		// 		arrFalse: [],
+		// 		arrRight: [],
+		// 		period: 0
+		// 	},
+		// 	book: { arrWords: [] }
+		// } as Statistic
+		// const v = changeUserStatistic(user.userId, user.token, option)
+		// console.log('vvv', v);
 
 	}
 
@@ -180,7 +180,8 @@ export default function PlayCall(props: PropsWord) {
 						? `Следующее слово` : 'Результат'}</button>
 				</div>
 				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrTrue} func={setmodalOpen} start={props.fu} />
-					: null}
+					: null
+			}
 		</div>			
 	)		
 }

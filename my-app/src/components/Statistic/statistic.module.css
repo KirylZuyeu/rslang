@@ -1,6 +1,46 @@
 .statistics{
-	background: url(../../images/jpg/069962b7cc7dc933bd0181b8d9da97e9.jpg);
+	background-color: white;
+	/* background: url(../../images/jpg/069962b7cc7dc933bd0181b8d9da97e9.jpg); */
 	min-height: 75vh;
 	width: 100%;background-size: cover;
 	background-repeat: no-repeat;
+}
+
+.statistic_today_wrapper {
+	padding: 0 20px;
+}
+
+.today_info {
+	display: flex;
+	gap: 5%;
+	justify-content: center;
+	align-items: center;
+}
+
+h2, h3, h4 {
+	color: black;
+}
+
+h3 p {
+	font-size: 2rem;
+}
+
+.game_statistic_wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	row-gap: 20px;
+}
+
+.game_sprint,
+.game_audioCall {
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	padding: 5px 10px;
 }

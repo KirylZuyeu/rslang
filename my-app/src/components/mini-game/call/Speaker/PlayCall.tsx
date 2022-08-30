@@ -5,7 +5,7 @@ import Picture from './picture/Picture';
 import styles from './speackker/speaker.module.css';
 import Sppeaker from './speackker/Sppeaker';
 
-export type Word = {	
+export type Word = {
 	audio: string
 	audioExample: string
 	audioMeaning: string
@@ -29,7 +29,7 @@ export type PropsWord = {
 }
 
 let arr = [] as number[];
-export default function PlayCall(props: PropsWord) {	
+export default function PlayCall(props: PropsWord) {
 	const [words, setWords] = useState([] as Word[]);
 	const [count, setCount] = useState(0);
 	const [arrRight, setArrRight] = useState([] as string[]);
@@ -38,7 +38,7 @@ export default function PlayCall(props: PropsWord) {
 	const [picShow, setPicShow] = useState(false);
 	const [allWords, setAllWords] = useState([] as string[]);
 	const [statistic, setStatistic] = useState({} as Statistic);
-	const [know, setKnow] = useState(true);		
+	const [know, setKnow] = useState(true);
 
 	useEffect(() => {
 		setWords(props.words)
@@ -50,65 +50,65 @@ export default function PlayCall(props: PropsWord) {
 		const result = [];
 		result.push(count);
 		while (result.length < 5) {
-			const randomNumber = Math.floor(Math.random() * (words.length - 1));			
-				if (!result.includes(randomNumber)){
-					result.push(randomNumber);
-				}			
+			const randomNumber = Math.floor(Math.random() * (words.length - 1));
+			if (!result.includes(randomNumber)) {
+				result.push(randomNumber);
+			}
 		}
 		return result;
 	}
-	const  shuffle = (arr: number[]) => arr.sort(() => Math.random() - 0.5);
+	const shuffle = (arr: number[]) => arr.sort(() => Math.random() - 0.5);
 
-	const playWord =  () => {
+	const playWord = () => {
 		if (words.length > count) {
 			console.log('----', words[count].word);
-			new Audio(`https://react-learnwords-example.herokuapp.com/${words[count].audio}`).play();		
+			new Audio(`https://react-learnwords-example.herokuapp.com/${words[count].audio}`).play();
 		}
-	}		
+	}
 	useEffect(() => {
 		playWord();
 	}, [words])
 
-	useEffect(()=>{		
-		playWord();		
+	useEffect(() => {
+		playWord();
 
 	}, [count])
 
-	if(words.length > count && know ){
+	if (words.length > count && know) {
 		let array = shuffle(rndNumbers());
-		arr = array;		
-	}	
+		arr = array;
+	}
 
 	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		(e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el =>
-			(el as HTMLElement).style.background = 'whitesmoke');		
+			(el as HTMLElement).style.background = 'whitesmoke');
 		setPicShow(false)
-		if(know){
+		if (know) {
 			if (!allWords.includes(words[count].id)) {
 				setAllWords(arr => [...arr, `${words[count].id}`])
 			}
 			setArrF(arr => [...arr, `${words[count].id}`]);
 		}
 		setKnow(true);
-		setCount(count +1);
-		arr.length = 0;		
+		setCount(count + 1);
+		arr.length = 0;
 	}
 
-	const checkWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {				
-		if(know){
-			if(id === words[count].id){
-				(e.target as HTMLButtonElement).style.background = '#00ff00';		
+	const checkWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
+		if (know) {
+			if (id === words[count].id) {
+				(e.target as HTMLButtonElement).style.background = '#00ff00';
 				if (!allWords.includes(words[count].id)) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
-				}		
+				}
 				setArrRight(arr => [...arr, `${id}`]);
-			}else{
+			} else {
 				if (!allWords.includes(words[count].id)) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
 				}
 				setArrF(arr => [...arr, `${words[count].id}`]);
-				(e.target as HTMLButtonElement).style.background = '#ff0000';						
-			}		
+				(e.target as HTMLButtonElement).style.background = '#ff0000';
+			}
 			setKnow(false);
 		}
 		setPicShow(true)
@@ -152,7 +152,14 @@ export default function PlayCall(props: PropsWord) {
 	// }
 
 
-	return (		
+
+
+
+	if (words.length <= count && modalOpen) {
+		console.log('openMod', allWords);
+	}
+
+	return (
 
 		<div className={styles.speaker_wrapper}>
 			{words.length > count
@@ -168,8 +175,8 @@ export default function PlayCall(props: PropsWord) {
 				</div>
 				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrRight} func={setmodalOpen} start={props.fu} />
 					: null}
-		</div>			
-	)		
+		</div>
+	)
 }
 
 

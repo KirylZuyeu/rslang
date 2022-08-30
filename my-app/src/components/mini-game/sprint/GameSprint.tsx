@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import Timer from './Timer';
 import Modal from './modal/Modal';
 import { Link } from 'react-router-dom';
+import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics} from '../../../functionality/api';
 
 export type Base = {
   id: string,
@@ -26,7 +27,8 @@ export type Base = {
 
 type Props = {
   base:Base[],
-  start: Dispatch<SetStateAction<boolean>>
+  start: Dispatch<SetStateAction<boolean>>,
+  level:Dispatch<SetStateAction<number>>
 }
 
 type IndexWord = {
@@ -38,7 +40,7 @@ function getRandomNumber(n:number) {
   return Math.floor(Math.random() * n);
 }
 
-const arrUsedNumbers = [] as number[];
+let arrUsedNumbers = [] as number[];
 
 function changeStateObject(objChanged:IndexWord, setIndex:(value: React.SetStateAction<IndexWord>) => void, base:Base[], func:Dispatch<SetStateAction<boolean>>) {
   const numberRandom = getRandomNumber(base.length-1);  
@@ -62,10 +64,13 @@ function compaireWords(index:number, wordTranslatedInCard:string, base:Base[]) {
   return realTranslatedWord === wordTranslatedInCard;
 }
 
-function GameSprint(props:Props) {   
+function GameSprint(props:Props) {
   const [indexObj, setIndex] = useState({word:props.base.length - 1, translatedWord:props.base.length - 1} as IndexWord);
   const [points, setPoints] = useState(0);
   const [flagModal, setflagModal] = useState(false);
+  const [flagIncreasePoint, setFlagIncreasePoint] = useState(false);
+  let [rightAnswers, setRightAnswers] = useState(0);
+  const [seriaRightAnswers, setSeriaRightAnswers] = useState(0);
   const [mistakenWords, setmistakenWords] = useState([] as string[]);
   const [rightWords, setrightWords] = useState([] as string[]);
   const [currentIncrease, setCurrentIncrease] = useState(10);
@@ -77,52 +82,109 @@ function GameSprint(props:Props) {
 
   function resultLearningWord(increase:number, btn:boolean) {
     const arrMistakenWords = mistakenWords as string[];
-    const arrRightWords = rightWords as string[];    
-    if (countLearnedWords > 2) {
-      setCurrentIncrease(currentIncrease*2);
-      setCountLearnedWords(countLearnedWords = 0);
-    }
+    const arrRightWords = rightWords as string[];
 
-    if(compaireWords(indexObj.word, wordTranslatedInCard, props.base)) {           
+    if(compaireWords(indexObj.word, wordTranslatedInCard, props.base)) {                 
       if(btn === false) {
         arrMistakenWords.push(idWordInCard);
         setmistakenWords(arrMistakenWords);        
         setCurrentIncrease(10);
+        setRightAnswers(0);
         increase = 0;
+        setCountLearnedWords(countLearnedWords = 0);
       }else{
       arrRightWords.push(idWordInCard);
       setrightWords(arrRightWords);
-      setCountLearnedWords(countLearnedWords + 1);
+      setCountLearnedWords(countLearnedWords += 1);
+      setFlagIncreasePoint(true);
+      setTimeout(()=> {setFlagIncreasePoint(false)},1000);
+      setRightAnswers(rightAnswers += 1);    
       }
-    } else {      
+    } else { 
       if(btn === true) {
         arrMistakenWords.push(idWordInCard);
         setmistakenWords(arrMistakenWords);        
         setCurrentIncrease(10);
+        setRightAnswers(0);
         increase = 0;
+        setCountLearnedWords(countLearnedWords = 0);
       }else{
       arrRightWords.push(idWordInCard);
-      setrightWords(arrRightWords);
-      setCountLearnedWords(countLearnedWords + 1);
+      setrightWords(arrRightWords);      
+      setCountLearnedWords(countLearnedWords += 1);
+      setFlagIncreasePoint(true);
+      setTimeout(()=> {setFlagIncreasePoint(false)},1000);
+      setRightAnswers(rightAnswers += 1);     
       }
     }
+    if (countLearnedWords > 2) {
+      setCurrentIncrease(currentIncrease*2);
+      setCountLearnedWords(countLearnedWords = 0);
+    }
+    if(rightAnswers > seriaRightAnswers) {setSeriaRightAnswers(rightAnswers)}
     return setPoints(points + increase)
   }
 
-  return (    
-    <div className={styles.gameSprint}>      
-      <div className={styles.gameWrapper}>
+  function updateStatistics() {
+    const user = localStorage.getItem('a') as string;
+    const userID = JSON.parse(user).userId;
+    const userToken = JSON.parse(user).token;
+    const statistic = getUserStatistic(userID, userToken);    
+    statistic.then(result => {     
+      let learnedWords = result.learnedWords as number;      
+      let optional = result.optional as OptionStatistics;
+      const dateNow = Date().split(' ').slice(1,4).join(' ');
+      const datePrev = optional.date? optional.date : null;
+      if (dateNow !== datePrev) {
+        learnedWords = 0;
+        optional = objStatisticZero;
+      }
+      const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
+      const allWordsInGame = [...mistakenWords, ...rightWords];
+      const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
+      const sprintArrLearnedWords = optional.sprint.arrLearnedWords;
+      const updatedSprintArrLearnedWords = [...sprintArrLearnedWords, ...allWordsInGame].filter((el, i) => [...sprintArrLearnedWords, ...allWordsInGame].indexOf(el) === i)
+      const periodPrev = optional.sprint.period;
+      const sumAllPrev = optional.sprint.sumAll;
+      const sumAllRightPrev = optional.sprint.sumRight;
 
+      optional.sprint = {
+        arrLearnedWords: updatedSprintArrLearnedWords,
+        arrFalse: mistakenWords,
+        arrRight: rightWords,
+        sumRight: sumAllRightPrev + rightWords.length,
+        sumAll: sumAllPrev + mistakenWords.length + rightWords.length,
+        period: periodPrev > seriaRightAnswers ? periodPrev : seriaRightAnswers
+      }
+      optional.arrLearnedWords.arr = updatedArrLearnedWords;
+      optional.date = dateNow;
+      learnedWords = updatedArrLearnedWords.length;
+      getUserStatistic(userID, userToken).then(res => console.log(res))
+      console.log(userID, userToken, {learnedWords, optional})
+      changeUserStatistic(userID, userToken, learnedWords, optional);
+      getUserStatistic(userID, userToken).then(res => console.log(res))
+    })
+  }
+
+  if(flagModal && localStorage.getItem('a')) {
+    updateStatistics();    
+  }
+
+  return (    
+    <div className={styles.gameSprint}>     
+      <div className={styles.gameWrapper}>      
+      {flagIncreasePoint? <div className={styles.increasePoint}>+{currentIncrease}</div> : null}
+      {flagModal? arrUsedNumbers = [] : null}
       {flagModal ?
-      <Modal func={setflagModal} arrayRight={rightWords} arrayMistaken={mistakenWords} base={props.base} totalResult={points} start={props.start}/>
+      <Modal func={setflagModal} arrayRight={rightWords} arrayMistaken={mistakenWords} base={props.base} totalResult={points} start={props.start} level={props.level}/>
       : null}
 
         <h2 className={styles.gamePoints}>Количество баллов: {points}</h2>
         <div className={styles.gameWindow}>
           <div className={styles.gameMarks}>
-          <Circle n={3} count={countLearnedWords}/>
+          <Circle n={3} count={countLearnedWords} arrMistaken={mistakenWords} arrRight={rightWords}/>
           </div>          
-          <h3 className={styles.gameEnglishWord}>{wordInCard}</h3>
+          <h3 className={styles.gameEnglishWord}>{wordInCard}</h3>          
           <h4 className={styles.gameRussianWord}>{wordTranslatedInCard}</h4>
           <div className={styles.gameButtons}>
               <button
@@ -154,18 +216,3 @@ GameSprint.propTypes = {
 }
 
 export default GameSprint;
-
-// option = {
-//   sprint: {arrFalse:[],
-//            arrRight:[],
-//            period:0},
-//   audioCall: {arrFalse:[],
-//             arrRight:[],
-//             period:0},
-//   book: {arrWords:[]}
-//   arr:[]         
-// }
-
-//  3 - 100
-//  2 - 50
-//  5 - 80

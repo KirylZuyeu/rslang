@@ -59,7 +59,8 @@
     color: orange;
 }
 
-h3, h4 {
+.gameEnglishWord,
+.gameRussianWord {
     color: white;
 }
 
@@ -114,4 +115,14 @@ h4 {
     border-radius: 50%;
     margin: 5px;
     background-color: green;
+}
+
+.increasePoint {    
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    transition: 2s;
 }

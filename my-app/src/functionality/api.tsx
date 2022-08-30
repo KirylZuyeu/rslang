@@ -1,3 +1,5 @@
+import { number } from "prop-types";
+
 const url = 'https://rslang-be-server.herokuapp.com';
 
 const words = `${url}/words`;
@@ -15,20 +17,21 @@ type ChengeDataUser = {
 	password: string
 }
 
-export type Statistic = {
-	learnedWords: number
-	sprint: {
-		arrFalse: string | never[]
-		arrRight: string | never[]
-		period: number
-	}
-	audioCall: {
-		arrFalse: string | never[]
-		arrRight: string | never[]
-		period: number
-	}
-	book: { arrWords: string | never[] }
-}
+export type Statistic = any
+// {
+// 	learnedWords: number
+// 	sprint: {
+// 		arrFalse: string[] | never[]
+// 		arrRight: string[] | never[]
+// 		period: number
+// 	}
+// 	audioCall: {
+// 		arrFalse: string[] | never[]
+// 		arrRight: string[] | never[]
+// 		period: number
+// 	}
+// 	book: { arrWords: string[] | never[] }
+// }
 
 export type RespSign = {
 	message: string
@@ -144,14 +147,15 @@ export const getUserStatistic = async (id: string, token: string) => (await fetc
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const changeUserStatistic = async (id: string, token: string, opt: Statistic) => 
-	(await fetch(`${users}/${id}/statistics`, {
+export const changeUserStatistic = async (id: string, token: string, num: number, opt: Statistic) =>
+	await fetch(`${users}/${id}/statistics`, {
 		method: 'PUT',
-		body: JSON.stringify({				
-			optional: opt			
+		body: JSON.stringify({
+			learnedWords: num,
+			optional: opt
 		}),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-	})).json()
+	})
 
 //================Users Setting=======================
 
@@ -179,13 +183,45 @@ export const changeUserSetting = async (id: string, token: string) =>
 //=================Sign In====================
 
 export const signIn = async (data: ChengeDataUser) =>
-	(await fetch(signin, {
+	await fetch(signin, {
 		method: 'POST',
 		body: JSON.stringify({			
 			email: data.email,
 			password: data.password			
 		}),
 		headers: { 'Content-Type': 'application/json' }
-	})).json()
+	})
+		.then(res => res.json())
+		.catch(err => console.log(err))
 
+
+export const checkToken = () => {
+	let time = new Date().toString().split(' ');
+	const d = time.slice(1, 5)
+	const prevTime = localStorage.getItem('t');
+	if (prevTime) {
+		let t = JSON.parse(prevTime)
+		console.log(t, 'ttt', d);
+		if (t[0] === d[0] && t[2] === d[2]) {
+			const prev = d[3].split(':')
+			const now = t[3].split(':')
+			console.log(prev, '===', now);
+			if (t[1] !== d[1] && (+prev[0] - +now[0]) <= 4) {
+				return true
+			} else if (t[1] === d[1]) {
+				if (+prev[0] >= 20) {
+					return true
+				}
+				if ((+prev[0] - +now[0]) <= 4) {
+					return true
+				}
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+	return false
+}		
 

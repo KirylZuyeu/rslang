@@ -1,95 +1,73 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { getUserStatistic, getUser, RespSign, changeUserStatistic } from "../../../functionality/api";
+import { number } from "prop-types";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../../../Context";
+import { changeUserStatistic, checkToken, getNewUserToken, getUser, getUserStatistic } from "../../../functionality/api";
 import styles from "./cabinet.module.css";
 
-type Props = {
-	isLogin: boolean
-	fu: Dispatch<SetStateAction<boolean>>
+export const objStatisticZero = {
+	sprint: {
+			arrFalse: [],
+			arrRight: [],
+			period: 0
+	},
+	audioCall: {
+			arrFalse: [],
+			arrRight: [],
+			period: 0
+	},
+	book: { arrWords: [] },
+	learnedWordsId: { arrLearnedWords: [] },
+	date: ' ',
+	longTimeStatistic: { longTimeStatistic: [] }
 }
 
-export default function Cabinet(props: Props) {
-	const [data, setData] = useState({} as RespSign)
-	const [setting, setSetting] = useState({})
-	const [render, setRender] = useState(false)
-	console.log("isLogin", props.isLogin);
-	console.log("date", data);
-
-	const a = 'hello a'.repeat(3)
-	console.log(a);
-
-	const option = {
-		learnedWords: 0,
-		sprint: {
-			arrFalse: [],
-			arrRight: [],
-			period: 0
-		},
-		audioCall: {
-			arrFalse: [],
-			arrRight: [],
-			period: 0
-		},
-		book: { arrWords: [] }
-	}
-
-	useEffect(() => {
-		const c = localStorage.getItem('a')
-		if (c) {
-			setRender(true)
-			const d = JSON.parse(c)
-			setData(d)
-			console.log(d);
-		}
-	}, [props.isLogin])
+export default function Cabinet() {
+	const [userData, setUserData] = useState(null as any)
+	const appContext = useContext(Context);
+	const navigate = useNavigate();
 
 	function exit() {
-		localStorage.removeItem('a')
-		setData({} as RespSign)
-		props.fu(false)
+		appContext?.setIsAvtorization(false);
+		localStorage.removeItem('a');
+		navigate('/');
 	}
 
 	function user() {
-		console.log('tokenn', data.token);
-
-		const sett = getUser(data.userId, data.token)
-			.then(res => console.log('res', res))
-		// .catch(err => console.log(err))
-		console.log(sett);
-
+		console.log(2, checkToken());
+		getUser(userData.userId, userData.token).then(res => console.log(res));
 	}
 
 	function statistic() {
-		console.log('tokenn', data.token);
-
-		const sett = getUserStatistic(data.userId, data.token)
-			.then(res => console.log('stat', res))
-		// .catch(err => console.log(err))
-		console.log(sett);
-
+		getUserStatistic(userData.userId, userData.token).then(res => console.log(res))
 	}
 
 	function changeStatistic() {
-		console.log('tokenn', data.token);
-
-		const sett = changeUserStatistic(data.userId, data.token, option)
-			.then(res => console.log('stat', res))
-		// .catch(err => console.log(err))
-		console.log(sett);
-
+		changeUserStatistic(userData.userId, userData.token, 0, objStatisticZero)
 	}
 
-	console.log(data);
-	console.log(setting);
+	function refreshToken() {
+		const t = getNewUserToken(userData.userId, userData.refreshToken)
+		t.then(res => console.log(res))
+	}
+
+	useEffect(() => {
+		console.log(111111111);
+		const a = localStorage.getItem('a')
+		setUserData(a ? JSON.parse(a) : 'aa')
+	}, [appContext?.isAvtorization])
+
 	return (
 		<div className={styles.cabinet}>
-			<div className={styles.cabinet_wrapp}>
-				<div>Name: {data ? data.name : 'войдите'}</div>
-				<div>Id: {data ? data.userId : 'войдите'}</div>
-				{data.userId ? <>
+			<div key={JSON.stringify(userData)} className={styles.cabinet_wrapp}>
+				<div>Name: {userData ? userData.name : 'войдите'}</div>
+				<div>Id: {userData ? userData.userId : 'войдите'}</div>
+				{userData ? <>
 					<button className={styles.btn_exit} onClick={exit}>Exit</button>
 					<button className={styles.btn_setting} onClick={user}>user</button>
 					<button className={styles.btn_setting} onClick={statistic}>Statistic</button>
-					<button className={styles.btn_setting} onClick={changeStatistic}>changeStatistic</button>
+					<button className={styles.btn_setting} onClick={changeStatistic}>resetStatistic</button>
+					<button className={styles.btn_setting} onClick={refreshToken}>refreshToken</button>
 				</> : null}
 			</div>
 		</div>

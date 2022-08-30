@@ -29,34 +29,20 @@ export type PropsWord = {
 }
 
 let arr = [] as number[];
-export default function PlayCall(props: PropsWord) {
-	const w = props.words
+export default function PlayCall(props: PropsWord) {	
 	const [words, setWords] = useState([] as Word[]);
 	const [count, setCount] = useState(0);
-	const [arrTrue, setArrT] = useState([] as string[]);
+	const [arrRight, setArrRight] = useState([] as string[]);
 	const [arrFalse, setArrF] = useState([] as string[]);
 	const [modalOpen, setmodalOpen] = useState(true);
 	const [picShow, setPicShow] = useState(false);
 	const [allWords, setAllWords] = useState([] as string[]);
-	const [user, setUser] = useState({} as RespSign);
 	const [statistic, setStatistic] = useState({} as Statistic);
-
 	const [know, setKnow] = useState(true);		
 
 	useEffect(() => {
-		setWords(w)
-	}, [/* w */])
-
-
-	useEffect(() => {
-		const c = localStorage.getItem('a')
-		if (c) {
-			const d = JSON.parse(c)
-			setUser(d)
-			console.log('data D', d);
-		}
-	}, [/* modalOpen */])
-
+		setWords(props.words)
+	}, [props.words])
 
 	console.log(words);
 
@@ -71,7 +57,6 @@ export default function PlayCall(props: PropsWord) {
 		}
 		return result;
 	}
-
 	const  shuffle = (arr: number[]) => arr.sort(() => Math.random() - 0.5);
 
 	const playWord =  () => {
@@ -82,7 +67,7 @@ export default function PlayCall(props: PropsWord) {
 	}		
 	useEffect(() => {
 		playWord();
-	}, [/* words */])
+	}, [words])
 
 	useEffect(()=>{		
 		playWord();		
@@ -93,7 +78,6 @@ export default function PlayCall(props: PropsWord) {
 		let array = shuffle(rndNumbers());
 		arr = array;		
 	}	
-
 
 	const getNextWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		(e.target as HTMLButtonElement).previousSibling?.childNodes.forEach(el =>
@@ -117,7 +101,7 @@ export default function PlayCall(props: PropsWord) {
 				if (!allWords.includes(words[count].id)) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
 				}		
-				setArrT(arr => [...arr, `${id}`]);
+				setArrRight(arr => [...arr, `${id}`]);
 			}else{
 				if (!allWords.includes(words[count].id)) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
@@ -129,44 +113,47 @@ export default function PlayCall(props: PropsWord) {
 		}
 		setPicShow(true)
 	}
-	
-	console.log('//', !!user, user);
 
 
-	// if (user) {
-	// 	const sett = getUserStatistic(user.userId, user.token)
-	// 		.then(res => setStatistic(res))
-	// 		.catch(err => console.log(err))
-	// 	console.log(sett)
-	// 	console.log(statistic)
+	// function updateStatistics() {
+	// 	const user = localStorage.getItem('a') as string;
+	// 	const userID = JSON.parse(user).userId;
+	// 	const userToken = JSON.parse(user).token;
+	// 	const statistic = getUserStatistic(userID, userToken);
+	// 	statistic.then(result => {
+	// 		console.log(result);
+	// 		let learnedWords = result.learnedWords as number;
+	// 		let optional = result.optional as OptionStatistics;
+	// 		const dateNow = Date().split(' ').slice(1, 4).join(' ');
+	// 		const datePrev = optional.date ? optional.date : null;
+	// 		if (dateNow !== datePrev) {
+	// 			learnedWords = 0;
+	// 			optional = objStatisticZero;
+	// 		}
+	// 		const arrLearnedWordsPrev = optional.arrLearnedWords;
+	// 		const allWordsInGame = [...arrFalse, ...arrRight];
+	// 		const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
+	// 		const periodPrev = optional.sprint.period;
+	// 		optional.sprint = {
+	// 			arrFalse,
+	// 			arrRight,
+	// 			period: periodPrev > seriaRightAnswers ? periodPrev : seriaRightAnswers
+	// 		}
+	// 		optional.arrLearnedWords = updatedArrLearnedWords;
+	// 		optional.date = dateNow;
+	// 		learnedWords = updatedArrLearnedWords.length;
 
+	// 		changeUserStatistic(userID, userToken, { learnedWords, optional });
+	// 	})
+	// }
+
+	// if (modalOpen && localStorage.getItem('a')) {
+	// 	updateStatistics();
 	// }
 
 
-
-
-	if (words.length <= count && modalOpen) {
-		console.log('openMod', allWords);
-		const option = {
-			learnedWords: 0,
-			sprint: {
-				arrFalse: ['2', '3', '4'],
-				arrRight: ['', ''],
-				period: 0
-			},
-			audioCall: {
-				arrFalse: [],
-				arrRight: [],
-				period: 0
-			},
-			book: { arrWords: [] }
-		} as Statistic
-		const v = changeUserStatistic(user.userId, user.token, option)
-		console.log('vvv', v);
-
-	}
-
 	return (		
+
 		<div className={styles.speaker_wrapper}>
 			{words.length > count
 				? <div className={styles.speaker_play}>
@@ -179,7 +166,7 @@ export default function PlayCall(props: PropsWord) {
 					<button className={styles.btn_next} onClick={(e) => getNextWord(e)}>{know ? `Не знаю` : count !== 19
 						? `Следующее слово` : 'Результат'}</button>
 				</div>
-				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrTrue} func={setmodalOpen} start={props.fu} />
+				: modalOpen ? <Modal base={words} arrayMistaken={arrFalse} arrayRight={arrRight} func={setmodalOpen} start={props.fu} />
 					: null}
 		</div>			
 	)		

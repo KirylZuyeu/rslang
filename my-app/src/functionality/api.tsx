@@ -236,32 +236,17 @@ export const signIn = async (data: ChengeDataUser) =>
 
 
 export const checkToken = () => {
-	let time = new Date().toString().split(' ');
-	const d = time.slice(1, 5)
+	let time = Date.now();	
 	const prevTime = localStorage.getItem('t');
 	if (prevTime) {
-		let t = JSON.parse(prevTime)
-		console.log(t, 'ttt', d);
-		if (t[0] === d[0] && t[2] === d[2]) {
-			const prev = d[3].split(':')
-			const now = t[3].split(':')
-			console.log(prev, '===', now);
-			if (t[1] !== d[1] && (+prev[0] - +now[0]) <= 4) {
-				return true
-			} else if (t[1] === d[1]) {
-				if (+prev[0] >= 20) {
-					return true
-				}
-				if ((+prev[0] - +now[0]) <= 4) {
-					return true
-				}
-			} else {
-				return false
-			}
-		} else {
-			return false
+		let t = +JSON.parse(prevTime);
+		console.log(t, 'ttt', time);
+		if ((time - t) > 5000) {
+			return false;
 		}
+		return true;
 	}
-	return false
 }
+
+//14400000
 

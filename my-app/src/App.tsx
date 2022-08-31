@@ -10,18 +10,22 @@ import Statistic from './components/Statistic/Statistic';
 import Dictionary from './components/Dictionary/Dictionary';
 import Autorization from './pages/authorization/autorization';
 import Cabinet from './components/header/Cabinet/Cabinet';
-import { useState } from 'react';
 import { Context } from './Context';
 import LayoutHeader from './components/loyout/LayoutHeader';
+import { checkToken } from './functionality/api';
+
+import { useState } from 'react';
 
 
 
 function App() {	
-	const [isAvtorization, setIsAvtorization] = useState(false)
+	const [isAvtorization, setIsAvtorization] = useState(false);
 
 	if (localStorage.getItem('a') && !isAvtorization) {
 		setIsAvtorization(true);
-	}
+	}	
+
+	{ console.log('isAvtorization+++', isAvtorization,) }
 
   return (
 		<Context.Provider value={{ isAvtorization, setIsAvtorization }}>

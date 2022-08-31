@@ -47,10 +47,9 @@ export default function Autorization() {
 				if (res) {
 					setIsin(true);
 					localStorage.setItem('a', JSON.stringify(res))
-					const date = new Date().toString().split(' ');
-					const d = date.slice(1, 5)
-					console.log("---------------", d);
-					localStorage.setItem('t', JSON.stringify(d))
+					const date = Date.now();
+					console.log("---------------", date);
+					localStorage.setItem('t', JSON.stringify(date))
 				} else {
 					setError(true)
 				}

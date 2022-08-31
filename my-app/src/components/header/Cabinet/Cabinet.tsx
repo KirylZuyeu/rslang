@@ -3,16 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../../../Context";
 import { changeUserStatistic, checkToken, createUserWord, getNewUserToken, getUser, getUserStatistic, getUserWords, objStatisticZero, RespSign } from "../../../functionality/api";
 import styles from "./cabinet.module.css";
+import { useLocation, useParams } from "react-router"
 
 export default function Cabinet() {
 	const [userData, setUserData] = useState({} as RespSign)
 	const appContext = useContext(Context);
 	const navigate = useNavigate();
 
+
 	function exit() {
 		appContext?.setIsAvtorization(false);
 		localStorage.removeItem('a');
-		navigate('/');
+		localStorage.removeItem('t');
+		navigate('/a');
 	}
 
 	function user() {
@@ -47,7 +50,7 @@ export default function Cabinet() {
 	}
 
 	function changeStatistic() {
-		console.log('tokenn', userData.token);
+		console.log('tokenn---------', userData.token);
 		changeUserStatistic(userData.userId, userData.token, 0, objStatisticZero)
 	}
 
@@ -56,7 +59,8 @@ export default function Cabinet() {
 			<div key={JSON.stringify(userData)} className={styles.cabinet_wrapp}>
 				<div>Name: {userData ? userData.name : 'войдите'}</div>
 				<div>Id: {userData ? userData.userId : 'войдите'}</div>
-				{userData ? <>
+				{userData
+					? <>
 					<button className={styles.btn_exit} onClick={exit}>Exit</button>
 					<button className={styles.btn_setting} onClick={user}>user</button>
 					<button className={styles.btn_setting} onClick={statistic}>Statistic</button>
@@ -64,7 +68,8 @@ export default function Cabinet() {
 					<button className={styles.btn_setting} onClick={changeStatistic}>changeStatistic</button>
 					<button className={styles.btn_setting} onClick={getWords}>getWords</button>
 					<button className={styles.btn_setting} onClick={putWord}>putWord</button>
-				</> : null}
+					</>
+					: null}
 			</div>
 		</div>
 	)

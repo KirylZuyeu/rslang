@@ -3,7 +3,7 @@ import GameSprint, { Base } from './GameSprint';
 import ListLevels from './ListLevels';
 import styles from './sprint.module.css';
 import { getWordsByGroup } from '../../../functionality/api';
-import base1 from './base1.json'
+import base1 from './base.json'
 
 function Sprint() {
 	const [start, setStart] = useState(true);
@@ -34,7 +34,7 @@ function Sprint() {
 						</div>
 					</div>
 				</div> 
-				: base.length? <GameSprint base={base1} start={setStart} level={setLevel}/> : <div>Нет слов для тренировки</div>
+					: base.length ? <GameSprint base={base} start={setStart} level={setLevel} /> : <div>Нет слов для тренировки</div>
 			}
 		</div>		
 	)

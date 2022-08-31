@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { changeUserStatistic, getUserStatistic, RespSign, Statistic } from '../../../../functionality/api';
+import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics, RespSign, Statistic } from '../../../../functionality/api';
 import Modal from '../../sprint/modal/Modal';
 import Picture from './picture/Picture';
 import styles from './speackker/speaker.module.css';
@@ -32,13 +32,18 @@ let arr = [] as number[];
 export default function PlayCall(props: PropsWord) {
 	const [words, setWords] = useState([] as Word[]);
 	const [count, setCount] = useState(0);
+	const [countSeria, setCountSeria] = useState(0);
+	const [maxSeria, setMaxSeria] = useState(0);
 	const [arrRight, setArrRight] = useState([] as string[]);
 	const [arrFalse, setArrF] = useState([] as string[]);
 	const [modalOpen, setmodalOpen] = useState(true);
 	const [picShow, setPicShow] = useState(false);
 	const [allWords, setAllWords] = useState([] as string[]);
-	const [statistic, setStatistic] = useState({} as Statistic);
 	const [know, setKnow] = useState(true);
+
+	console.log('countSeria', countSeria);
+	console.log('maxSeria', maxSeria);
+
 
 	useEffect(() => {
 		setWords(props.words)
@@ -88,9 +93,14 @@ export default function PlayCall(props: PropsWord) {
 				setAllWords(arr => [...arr, `${words[count].id}`])
 			}
 			setArrF(arr => [...arr, `${words[count].id}`]);
+			if (maxSeria < countSeria) {
+				setMaxSeria(countSeria)
+			}
+			setCountSeria(0);
 		}
 		setKnow(true);
 		setCount(count + 1);
+
 		arr.length = 0;
 	}
 
@@ -102,10 +112,17 @@ export default function PlayCall(props: PropsWord) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
 				}
 				setArrRight(arr => [...arr, `${id}`]);
+				setCountSeria(countSeria + 1);
+				console.log('=======', countSeria);
+
 			} else {
 				if (!allWords.includes(words[count].id)) {
 					setAllWords(arr => [...arr, `${words[count].id}`])
 				}
+				if (maxSeria < countSeria) {
+					setMaxSeria(countSeria)
+				}
+				setCountSeria(0);
 				setArrF(arr => [...arr, `${words[count].id}`]);
 				(e.target as HTMLButtonElement).style.background = '#ff0000';
 			}
@@ -114,42 +131,57 @@ export default function PlayCall(props: PropsWord) {
 		setPicShow(true)
 	}
 
+	function updateStatistics() {
+		const user = localStorage.getItem('a') as string;
+		const userID = JSON.parse(user).userId;
+		const userToken = JSON.parse(user).token;
+		const statistic = getUserStatistic(userID, userToken);
+		statistic.then(result => {
+			let learnedWords = result.learnedWords as number;
+			let optional = result.optional as OptionStatistics;
+			const dateNow = Date().split(' ').slice(1, 4).join(' ');
+			const datePrev = optional.date ? optional.date : null;
+			if (dateNow !== datePrev) {
+				learnedWords = 0;
+				optional = objStatisticZero;
+			}
+			const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
+			const allWordsInGame = [...arrFalse, ...arrRight];
+			const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
+			const callArrLearnedWords = optional.audioCall.arrLearnedWords;
+			const updatedSprintArrLearnedWords = [...callArrLearnedWords, ...allWordsInGame].filter((el, i) => [...callArrLearnedWords, ...allWordsInGame].indexOf(el) === i)
+			const periodPrev = optional.audioCall.period;
+			const sumAllPrev = optional.audioCall.sumAll;
+			const sumAllRightPrev = optional.audioCall.sumRight;
 
-	// function updateStatistics() {
-	// 	const user = localStorage.getItem('a') as string;
-	// 	const userID = JSON.parse(user).userId;
-	// 	const userToken = JSON.parse(user).token;
-	// 	const statistic = getUserStatistic(userID, userToken);
-	// 	statistic.then(result => {
-	// 		console.log(result);
-	// 		let learnedWords = result.learnedWords as number;
-	// 		let optional = result.optional as OptionStatistics;
-	// 		const dateNow = Date().split(' ').slice(1, 4).join(' ');
-	// 		const datePrev = optional.date ? optional.date : null;
-	// 		if (dateNow !== datePrev) {
-	// 			learnedWords = 0;
-	// 			optional = objStatisticZero;
-	// 		}
-	// 		const arrLearnedWordsPrev = optional.arrLearnedWords;
-	// 		const allWordsInGame = [...arrFalse, ...arrRight];
-	// 		const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
-	// 		const periodPrev = optional.sprint.period;
-	// 		optional.sprint = {
-	// 			arrFalse,
-	// 			arrRight,
-	// 			period: periodPrev > seriaRightAnswers ? periodPrev : seriaRightAnswers
-	// 		}
-	// 		optional.arrLearnedWords = updatedArrLearnedWords;
-	// 		optional.date = dateNow;
-	// 		learnedWords = updatedArrLearnedWords.length;
+			optional.audioCall = {
+				arrLearnedWords: updatedSprintArrLearnedWords,
+				arrFalse: arrFalse,
+				arrRight: arrRight,
+				sumRight: sumAllRightPrev + arrRight.length,
+				sumAll: sumAllPrev + arrFalse.length + arrRight.length,
+				period: periodPrev > maxSeria ? periodPrev : maxSeria
+			}
+			optional.arrLearnedWords.arr = updatedArrLearnedWords;
+			optional.date = dateNow;
+			learnedWords = updatedArrLearnedWords.length;
+			getUserStatistic(userID, userToken).then(res => console.log(res))
+			console.log(userID, userToken, { learnedWords, optional })
+			changeUserStatistic(userID, userToken, learnedWords, optional);
+			getUserStatistic(userID, userToken).then(res => console.log(res))
+		})
+	}
 
-	// 		changeUserStatistic(userID, userToken, { learnedWords, optional });
-	// 	})
-	// }
+	useEffect(() => {
+		if ((words.length <= count) && localStorage.getItem('a')) {
+			if (maxSeria < countSeria) {
+				setMaxSeria(countSeria)
+			}
+			updateStatistics();
+			console.log('-----===', arrRight, arrFalse);
+		}
+	}, [words.length <= count])
 
-	// if (modalOpen && localStorage.getItem('a')) {
-	// 	updateStatistics();
-	// }
 
 
 

@@ -167,10 +167,10 @@ function GameSprint(props:Props) {
     })
   }
 
-  useEffect (() => {
   if(flagModal && localStorage.getItem('a')) {
-    updateStatistics();   
+    updateStatistics();    
   }
+
 	}, [flagModal === true]);
 
   return (    

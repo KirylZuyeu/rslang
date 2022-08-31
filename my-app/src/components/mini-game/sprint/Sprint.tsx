@@ -34,7 +34,7 @@ function Sprint() {
 						</div>
 					</div>
 				</div> 
-				: base.length? <GameSprint base={base} start={setStart} level={setLevel}/> : <div>Нет слов для тренировки</div>
+				: base.length? <GameSprint base={base1} start={setStart} level={setLevel}/> : <div>Нет слов для тренировки</div>
 			}
 		</div>		
 	)

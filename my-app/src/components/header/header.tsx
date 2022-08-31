@@ -1,38 +1,21 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { Context, ContextUser } from "../../Context";
 import CabinetPic from "./CabinetPic";
 import styles from "./header.module.css";
 
-type Props = {
-	isLogin: boolean
-}
 
-export default function Header(props: Props) {
-	const [cabinet, setCabinet] = useState({});
-	const [isSignIn, setIsSignIn] = useState(false)
-
-	useEffect(() => {
-		const c = localStorage.getItem('a')
-		if (c) {
-			setIsSignIn(true)
-			const d = JSON.parse(c)
-			setCabinet(d)
-			console.log(d);
-		} else {
-			setCabinet({})
-			setIsSignIn(false)
-		}
-	}, [props.isLogin])
-
-	console.log('ff', cabinet);
-
+export default function Header() {
+	const appContext = useContext(Context);
+	const userContext = useContext(ContextUser);
 
 	const link = [{ link: 'learn-words', name: 'learn words' }, { link: 'dictionary', name: 'dictionary' },
 	{ link: 'statistics', name: 'statistics' }, { link: 'mini-game', name: 'mini-game' }, { link: 'team', name: 'team' },
 		{
-			link: (Object.keys(cabinet).length !== 0) ? 'cabinet' : 'come-in', name: (Object.keys(cabinet).length !== 0)
+			link: appContext?.isAvtorization ? 'cabinet' : 'come-in', name: appContext?.isAvtorization
 				? <CabinetPic /> : 'come in'
 		}];
+
 	return (
 		<div className={styles.header}>
 			<h1 className={styles.header_title}><Link className={styles.title} to="/">RS Lang</Link></h1>

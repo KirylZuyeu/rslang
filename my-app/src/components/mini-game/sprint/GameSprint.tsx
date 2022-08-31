@@ -1,7 +1,7 @@
 import Circle from './Circle';
 import styles from './sprint.module.css';
 import PropTypes from 'prop-types';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 // import base from './base.json';
 import Timer from './Timer';
 import Modal from './modal/Modal';
@@ -147,6 +147,7 @@ function GameSprint(props:Props) {
       const periodPrev = optional.sprint.period;
       const sumAllPrev = optional.sprint.sumAll;
       const sumAllRightPrev = optional.sprint.sumRight;
+      console.log(sumAllRightPrev, sumAllPrev)
 
       optional.sprint = {
         arrLearnedWords: updatedSprintArrLearnedWords,
@@ -166,9 +167,11 @@ function GameSprint(props:Props) {
     })
   }
 
+  useEffect (() => {
   if(flagModal && localStorage.getItem('a')) {
-    updateStatistics();    
+    updateStatistics();   
   }
+	}, [flagModal === true]);
 
   return (    
     <div className={styles.gameSprint}>     

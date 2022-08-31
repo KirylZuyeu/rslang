@@ -10,13 +10,12 @@ function AudioCall() {
 	const [start, setStart] = useState(true);
 	const [num, setNum] = useState(-1);
 
-
 	const levels = [0, 1, 2, 3, 4, 5];
 
 
 	useEffect(() => {
-		// document.title = 'играем в Аудио вызов';
-		const res = getWords(num, 1)
+		setWords([]);
+		const res = getWords(num, 1);
 		res.then(
 			(result) => {
 				let res
@@ -32,11 +31,7 @@ function AudioCall() {
 				setError(error);
 			}
 		)
-	}, [num])
-
-
-
-
+	}, [num]);
 
 
 
@@ -54,18 +49,8 @@ function AudioCall() {
 				: error ? <div>Ошибка: {error}</div> : !isLoaded || !words.length ? <div className={styles.call}>Загрузка...</div>
 					: <PlayCall words={words} fu={setStart} resetWords={setWords} />				
 			}
-
 		</div>
 	)
 }
 
 export default AudioCall
-
-
-
-// if (error) {
-// 	return <div>Ошибка: {error}</div>;
-// }
-// if (!isLoaded) {
-// 	return <div className={styles.call}>Загрузка...</div>;
-// } 

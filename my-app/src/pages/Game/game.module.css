@@ -2,4 +2,34 @@
 	background: url(../../images/jpg/English1.jpg);
 	background-repeat: no-repeat;
 	min-height: 75vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.call,
+.sprint{
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	width: 400px;
+	height: 200px;	
+	margin-bottom: 20px;
+	font-size: 3rem;
+	text-decoration: none;	
+	font-weight: 700;
+}
+
+.sprint{	
+	background-image: url(../../images/jpg/sprint_pic.jpg);	
+	color: rgb(0, 0, 0);
+}
+
+.call{
+	background-image: url(../../images/jpg/audio_call.jpg);	
+	color: rgb(255, 255, 255);
 }

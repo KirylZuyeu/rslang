@@ -1,4 +1,3 @@
-import { number } from "prop-types";
 
 const url = 'https://rslang-be-server.herokuapp.com';
 
@@ -15,7 +14,7 @@ type DataUser = {
 type ChengeDataUser = {
 	email: string,
 	password: string
-} 
+}
 
 export type OptionStatistics = {
 	sprint: {
@@ -23,7 +22,7 @@ export type OptionStatistics = {
 		arrFalse: string[] | never[]
 		arrRight: string[] | never[]
 		sumRight: number
-        sumAll: number
+		sumAll: number
 		period: number
 	}
 	audioCall: {
@@ -31,13 +30,13 @@ export type OptionStatistics = {
 		arrFalse: string[] | never[]
 		arrRight: string[] | never[]
 		sumRight: number
-        sumAll: number
+		sumAll: number
 		period: number
 	}
 	book: { arrWords: string[] | never[] }
-	arrLearnedWords: {arr:string[]}
+	arrLearnedWords: { arr: string[] }
 	date: string
-	longTimeStatistic: {arr:never[]}
+	longTimeStatistic: { arr: never[] }
 }
 
 export const objStatisticZero = {
@@ -46,7 +45,7 @@ export const objStatisticZero = {
 		arrFalse: [],
 		arrRight: [],
 		sumRight: 0,
-        sumAll: 0,
+		sumAll: 0,
 		period: 0
 	},
 	audioCall: {
@@ -54,19 +53,20 @@ export const objStatisticZero = {
 		arrFalse: [],
 		arrRight: [],
 		sumRight: 0,
-        sumAll: 0,
+		sumAll: 0,
 		period: 0
 	},
 	book: { arrWords: [] },
-	arrLearnedWords: {arr:[]},
+	arrLearnedWords: { arr: [] },
 	date: ' ',
-	longTimeStatistic: {arr:[]}
+	longTimeStatistic: { arr: [] }
 }
 
 export type Statistic = {
 	learnedWords: number
 	optional: OptionStatistics
 }
+
 
 export type RespSign = {
 	message: string
@@ -83,7 +83,7 @@ export const getWord = async (id: string) => (await fetch(`${words}/${id}`)).jso
 export const getWordsByGroup = async (groupNumber: number) => (await fetch(`${words}/group?group=${groupNumber}`)).json();
 
 //==================USERS================
-export const createUser = async (data: DataUser) => 
+export const createUser = async (data: DataUser) =>
 	(await fetch(users, {
 		method: 'POST',
 		body: JSON.stringify({
@@ -100,7 +100,7 @@ export const getUser = async (id: string, token: string) => (await fetch(`${user
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const changeUser = async (id: string, token: string, data: ChengeDataUser) => 
+export const changeUser = async (id: string, token: string, data: ChengeDataUser) =>
 	(await fetch(`${users}/${id}`, {
 		method: 'PUT',
 		body: JSON.stringify({
@@ -128,10 +128,10 @@ export const getUserWords = async (id: string, token: string) => (await fetch(`$
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const createUserWord = async (userId: string, wordId: string, group: string, token: string) => 
+export const createUserWord = async (userId: string, wordId: string, group: string, token: string) =>
 	(await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'POST',
-		body: JSON.stringify({	
+		body: JSON.stringify({
 			difficulty: group,
 			optional: 1
 		}),
@@ -145,10 +145,10 @@ export const getUserWord = async (userId: string, wordId: string, token: string)
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json();
 
-export const changeUserWord = async (userId: string, wordId: string, group: string, token: string) => 
+export const changeUserWord = async (userId: string, wordId: string, group: string, token: string) =>
 	(await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'PUT',
-		body: JSON.stringify({			
+		body: JSON.stringify({
 			difficulty: group,
 			// optional: {} ???????????
 		}),
@@ -179,23 +179,21 @@ export const getUsersAggregatedWord = async (userId: string, wordId: string, tok
 
 //================Users Statistic=======================
 
-// export const getUserStatistic = async (id: string, token: string) => (await fetch(`${users}/${id}/statistics`, {
-// 	method: "GET",
-// 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-// })).json();
-
 export const getUserStatistic = async (id: string, token: string) => (await fetch(`${users}/${id}/statistics`, {
-    method: 'GET',
+	method: 'GET',
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const changeUserStatistic = async (id: string, token: string, num: number, opt: OptionStatistics) => 
+
+export const changeUserStatistic = async (id: string, token: string, num: number, opt: OptionStatistics) =>
 	await fetch(`${users}/${id}/statistics`, {
 		method: 'PUT',
 		body: JSON.stringify(
-			{'learnedWords': num,
-			'optional': opt}
-			),
+			{
+				'learnedWords': num,
+				'optional': opt
+			}
+		),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})
 
@@ -207,7 +205,7 @@ export const getUserSetting = async (id: string, token: string) =>
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json();
 
-export const changeUserSetting = async (id: string, token: string) => 
+export const changeUserSetting = async (id: string, token: string) =>
 	(await fetch(`${users}/${id}/setting`, {
 		method: 'PUT',
 		body: JSON.stringify({
@@ -225,13 +223,30 @@ export const changeUserSetting = async (id: string, token: string) =>
 //=================Sign In====================
 
 export const signIn = async (data: ChengeDataUser) =>
-	(await fetch(signin, {
+	await fetch(signin, {
 		method: 'POST',
-		body: JSON.stringify({			
+		body: JSON.stringify({
 			email: data.email,
-			password: data.password			
+			password: data.password
 		}),
 		headers: { 'Content-Type': 'application/json' }
-	})).json()
+	})
+		.then(res => res.json())
+		.catch(err => console.log(err))
 
+
+export const checkToken = () => {
+	let time = Date.now();	
+	const prevTime = localStorage.getItem('t');
+	if (prevTime) {
+		let t = +JSON.parse(prevTime);
+		console.log(t, 'ttt', time);
+		if ((time - t) > 5000) {
+			return false;
+		}
+		return true;
+	}
+}
+
+//14400000
 

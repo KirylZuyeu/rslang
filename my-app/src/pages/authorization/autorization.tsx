@@ -1,6 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { setDefaultResultOrder } from 'dns';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom';
+import { Context } from '../../Context';
 import { createUser, RespSign, signIn } from '../../functionality/api';
+
 import styles from "./autorization.module.css";
 
 type FormValues = {
@@ -10,51 +14,59 @@ type FormValues = {
 	Repeat_Password: string
 }
 
-type Props = {
-	fu: Dispatch<SetStateAction<boolean>>
-}
 
-
-export default function Autorization(props: Props) {
+export default function Autorization() {
 	const { register, formState: { errors }, handleSubmit, reset, watch } = useForm<FormValues>({ mode: 'onBlur' })
+	const [error, setError] = useState(false);
 	const [isAvtorize, setisAvtorize] = useState(false);
-	const [response, setResponse] = useState({} as RespSign);
+	const [isIn, setIsin] = useState(false);
+	const appContext = useContext(Context);
+	const navigate = useNavigate();
 
 	const password = useRef({});
-
 	password.current = watch("Password", "");
 
 	function onSubmitReg(data: FormValues) {
-		console.log(data);
-
 		createUser({
 			name: data.Name,
 			email: data.Email,
 			password: data.Password
-		}).then(result => console.log(result))
+		})
+			.then(result => console.log(result))
+			.catch(err => console.log('repeat registration', err))
 		reset()
+		setisAvtorize(false)
 	}
 
-	function onSubmitIn(data: FormValues) {
+	function onSubmitIn(data: FormValues) {		
 		signIn({
 			email: data.Email,
 			password: data.Password
 		})
-			.then(result => setResponse(result))
-			.catch(err => console.log(err))
-		reset()
+			.then(res => {
+				if (res) {
+					setIsin(true);
+					localStorage.setItem('a', JSON.stringify(res))
+					const date = Date.now();
+					console.log("---------------", date);
+					localStorage.setItem('t', JSON.stringify(date))
+				} else {
+					setError(true)
+				}
+			})
 	}
 
+
 	useEffect(() => {
-		if (response.name) {
-			localStorage.setItem('a', JSON.stringify(response));
-			props.fu(true)
+		if (isIn) {
+			reset()
+			navigate('/cabinet')
+			appContext?.setIsAvtorization(true);
 		}
-	}, [response])
-
-
-	console.log(response);
-
+		if (error) {
+			console.log('пароль не правильный');
+		}
+	}, [isIn])
 
 	let variantL = 'autoriz_varia_L';
 	let variantR = 'autoriz_varia_R';
@@ -68,7 +80,14 @@ export default function Autorization(props: Props) {
 	}
 
 	return (
+
 		<div className={styles.autorization}>
+			{error ? <div className={styles.error}>
+				<div className={styles.error_wrapp}>
+					Не верный пароль
+					<button className={styles.error_btn} onClick={() => setError(false)}>назад</button>
+				</div>
+			</div> : null}
 			<div className={styles.wrapper}>
 				<div className={styles.autoriz_varia}>
 					<div className={styles[variantR]} onClick={() => setisAvtorize(false)}>Вход</div>
@@ -167,5 +186,6 @@ export default function Autorization(props: Props) {
 				}
 			</div>
 		</div >
+
 	)
 }

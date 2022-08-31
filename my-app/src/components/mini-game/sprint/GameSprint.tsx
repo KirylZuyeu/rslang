@@ -1,7 +1,7 @@
 import Circle from './Circle';
 import styles from './sprint.module.css';
 import PropTypes from 'prop-types';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 // import base from './base.json';
 import Timer from './Timer';
 import Modal from './modal/Modal';
@@ -166,9 +166,11 @@ function GameSprint(props:Props) {
     })
   }
 
-  if(flagModal && localStorage.getItem('a')) {
-    updateStatistics();    
-  }
+	useEffect(() => {
+		if (flagModal && localStorage.getItem('a')) {
+			updateStatistics();
+		}
+	}, [flagModal === true]);
 
   return (    
     <div className={styles.gameSprint}>     

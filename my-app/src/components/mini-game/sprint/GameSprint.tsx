@@ -167,9 +167,10 @@ function GameSprint(props:Props) {
     })
   }
 
-  if(flagModal && localStorage.getItem('a')) {
-    updateStatistics();    
-  }
+	useEffect(() => {
+		if (flagModal && localStorage.getItem('a')) {
+			updateStatistics();
+		}
 
 	}, [flagModal === true]);
 

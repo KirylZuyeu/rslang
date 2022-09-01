@@ -179,10 +179,12 @@ export const getUsersAggregatedWord = async (userId: string, wordId: string, tok
 
 //================Users Statistic=======================
 
-export const getUserStatistic = async (id: string, token: string) => (await fetch(`${users}/${id}/statistics`, {
+export const getUserStatistic = async (id: string, token: string) => await fetch(`${users}/${id}/statistics`, {
 	method: 'GET',
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-})).json();
+})
+	.then(res => res.json())
+	.catch(err => console.log(err))
 
 
 export const changeUserStatistic = async (id: string, token: string, num: number, opt: OptionStatistics) =>
@@ -230,9 +232,7 @@ export const signIn = async (data: ChengeDataUser) =>
 			password: data.password
 		}),
 		headers: { 'Content-Type': 'application/json' }
-	})
-		.then(res => res.json())
-		.catch(err => console.log(err))
+	}).then(res => res.json())
 
 
 export const checkToken = () => {
@@ -241,7 +241,7 @@ export const checkToken = () => {
 	if (prevTime) {
 		let t = +JSON.parse(prevTime);
 		console.log(t, 'ttt', time);
-		if ((time - t) > 5000) {
+		if ((time - t) > 50000) {
 			return false;
 		}
 		return true;

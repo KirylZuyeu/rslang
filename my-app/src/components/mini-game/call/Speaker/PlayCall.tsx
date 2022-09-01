@@ -44,7 +44,6 @@ export default function PlayCall(props: PropsWord) {
 	console.log('countSeria', countSeria);
 	console.log('maxSeria', maxSeria);
 
-
 	useEffect(() => {
 		setWords(props.words)
 	}, [props.words])

@@ -10,12 +10,24 @@ export default function Cabinet() {
 	const appContext = useContext(Context);
 	const navigate = useNavigate();
 
+	const { fetch: originalFetch } = window;
+	window.fetch = async (...args) => {
+		let [resource, config] = args;
+		let response = await originalFetch(resource, config);
+		if (!response.ok && response.status === 401) {
+			appContext?.setIsAvtorization(false);
+			localStorage.removeItem('a');
+			localStorage.removeItem('t');
+			navigate('/come-in');
+		}
+		return response;
+	};
 
 	function exit() {
 		appContext?.setIsAvtorization(false);
 		localStorage.removeItem('a');
 		localStorage.removeItem('t');
-		navigate('/a');
+		navigate('/');
 	}
 
 	function user() {
@@ -24,7 +36,6 @@ export default function Cabinet() {
 	}
 
 	function statistic() {
-
 		getUserStatistic(userData.userId, userData.token).then(res => console.log(res))
 	}
 

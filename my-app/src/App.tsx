@@ -12,14 +12,12 @@ import Autorization from './pages/authorization/autorization';
 import Cabinet from './components/header/Cabinet/Cabinet';
 import { Context } from './Context';
 import LayoutHeader from './components/loyout/LayoutHeader';
-import { checkToken } from './functionality/api';
-
 import { useState } from 'react';
 
 
 
 function App() {	
-	const [isAvtorization, setIsAvtorization] = useState(false);
+	const [isAvtorization, setIsAvtorization] = useState(false);	
 
 	if (localStorage.getItem('a') && !isAvtorization) {
 		setIsAvtorization(true);

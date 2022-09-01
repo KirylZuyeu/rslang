@@ -1,4 +1,4 @@
-import { setDefaultResultOrder } from 'dns';
+import { LOADIPHLPAPI, setDefaultResultOrder } from 'dns';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
@@ -43,17 +43,14 @@ export default function Autorization() {
 			email: data.Email,
 			password: data.Password
 		})
-			.then(res => {
-				if (res) {
+			.then(res => {				
 					setIsin(true);
 					localStorage.setItem('a', JSON.stringify(res))
 					const date = Date.now();
 					console.log("---------------", date);
-					localStorage.setItem('t', JSON.stringify(date))
-				} else {
-					setError(true)
-				}
+				localStorage.setItem('t', JSON.stringify(date))				
 			})
+			.catch(() => setError(true))
 	}
 
 

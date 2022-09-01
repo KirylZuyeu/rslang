@@ -74,6 +74,7 @@ function GameSprint(props:Props) {
   const [mistakenWords, setmistakenWords] = useState([] as string[]);
   const [rightWords, setrightWords] = useState([] as string[]);
   const [currentIncrease, setCurrentIncrease] = useState(10);
+  const [messageIncrease, setMessageIcrease] = useState(10);
   let [countLearnedWords, setCountLearnedWords] = useState(0);
   const objChanged:IndexWord = {word:0, translatedWord:0};
   const wordInCard = props.base[indexObj.word].word;
@@ -117,6 +118,7 @@ function GameSprint(props:Props) {
       setRightAnswers(rightAnswers += 1);     
       }
     }
+    setMessageIcrease(currentIncrease);
     if (countLearnedWords > 2) {
       setCurrentIncrease(currentIncrease*2);
       setCountLearnedWords(countLearnedWords = 0);
@@ -177,7 +179,7 @@ function GameSprint(props:Props) {
   return (    
     <div className={styles.gameSprint}>     
       <div className={styles.gameWrapper}>      
-      {flagIncreasePoint? <div className={styles.increasePoint}>+{currentIncrease}</div> : null}
+      {flagIncreasePoint? <div className={styles.increasePoint}>+{messageIncrease}</div> : null}
       {flagModal? arrUsedNumbers = [] : null}
       {flagModal ?
       <Modal func={setflagModal} arrayRight={rightWords} arrayMistaken={mistakenWords} base={props.base} totalResult={points} start={props.start} level={props.level}/>

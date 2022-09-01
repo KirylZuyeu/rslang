@@ -64,11 +64,11 @@
     color: white;
 }
 
-h3 {
+.gameEnglishWord {
     font-size: 2.5rem;
 }
 
-h4 {
+.gameRussianWord {
     font-size: 1.5rem;
 }
 

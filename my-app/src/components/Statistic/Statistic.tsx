@@ -88,10 +88,13 @@ export default function Statistics() {
 				</div>
 			</div>
 		  </section>
-		  <section className={styles.statistic_all_wrapper}>
-			<ChartBar settings={statistic}/>
-			<ChartProgres settings={statistic}/>
-		  </section>
+
+		  {statistic.optional.longTimeStatistic ? 
+			<section className={styles.statistic_all_wrapper}>
+				<ChartBar settings={statistic}/>
+				<ChartProgres settings={statistic}/>
+			</section>
+			: 'Для отражения статистики, нужно сыграть в мини-игры.'}
 				</>}
 		</div>
 	)

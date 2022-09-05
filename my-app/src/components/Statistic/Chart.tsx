@@ -20,13 +20,10 @@ ChartJS.register(
 );
 
 export default function ChartBar(props:any) {
-
   const datesASD = Object.entries(props.settings.optional.longTimeStatistic).map(([key, value]) => ({key,value}))
-  
   const arrDates = datesASD.sort(
     (objA, objB) => new Date(objA.key).getTime() - new Date(objB.key).getTime(),
   );
-  console.log(arrDates)
 
   const options = {
     responsive: true,

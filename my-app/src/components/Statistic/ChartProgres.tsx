@@ -20,6 +20,7 @@ ChartJS.register(
 );
 
 export default function ChartProgres(props:any) {
+  
   const datesASD = Object.entries(props.settings.optional.longTimeStatistic).map(([key, value]) => ({key,value}))
   
   const arrDates = datesASD.sort(

@@ -6,7 +6,7 @@ type Modal = {
 }
 
 function Timer(props:Modal) {    
-    const [time,setTime] = useState(30);
+    const [time,setTime] = useState(10);
     
     useEffect(()=> {
         if (time > 0) {

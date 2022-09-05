@@ -1,18 +1,19 @@
 import MainPage from './pages/main-page/main-page';
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, BrowserRouter, Routes, useNavigate } from 'react-router-dom';
 import Layout from './components/loyout/Layout';
 import Team from './components/team/team';
 import Game from './pages/Game/game';
 import Sprint from './components/mini-game/sprint/Sprint';
 import AudioCall from './components/mini-game/call/audioCall';
 import Learn from './components/Learn-Words/Learn';
-import Statistic from './components/Statistic/Statistic';
 import Dictionary from './components/Dictionary/Dictionary';
 import Autorization from './pages/authorization/autorization';
 import Cabinet from './components/header/Cabinet/Cabinet';
 import { Context } from './Context';
 import LayoutHeader from './components/loyout/LayoutHeader';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import Statistics from './components/Statistic/Statistic';
+import { getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
 
 
 
@@ -21,7 +22,25 @@ function App() {
 
 	if (localStorage.getItem('a') && !isAvtorization) {
 		setIsAvtorization(true);
-	}	
+	}
+
+	if (localStorage.getItem('a')  && isAvtorization) {
+		const user = localStorage.getItem('a') as string;
+		const userID = JSON.parse(user).userId;
+		const userToken = JSON.parse(user).token;
+		const statistic = getUserStatistic(userID, userToken);    
+		statistic.then(result => { 
+			console.log(result);   
+		  let learnedWords = result.learnedWords as number;      
+		  let optional = result.optional as OptionStatistics;
+		  const dateNow = Date().split(' ').slice(1,4).join(' ');
+		  const datePrev = optional.date? optional.date : null;
+		  if (dateNow !== datePrev) {
+			learnedWords = 0;
+			optional = objStatisticZero;
+		  }
+		})
+	}
 
 	{ console.log('isAvtorization+++', isAvtorization,) }
 
@@ -33,7 +52,7 @@ function App() {
 						<Route index element={<MainPage />} />
 						<Route path='/team' element={<Team />} />
 						<Route path='/learn-words' element={<Learn />} />
-						<Route path='/statistics' element={<Statistic />} />
+						<Route path='/statistics' element={<Statistics />} />
 						<Route path='/dictionary' element={<Dictionary />} />
 						<Route path="/come-in" element={<Autorization />} />
 						<Route path="/cabinet" element={<Cabinet />} />

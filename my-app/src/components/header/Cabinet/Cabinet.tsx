@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../../Context";
-import { changeUserStatistic, checkToken, createUserWord, getNewUserToken, getUser, getUserStatistic, getUserWords, objStatisticZero, RespSign } from "../../../functionality/api";
+import { changeUserStatistic, checkToken, createUserWord, delUserWord, getNewUserToken, getUser, getUserStatistic, getUserWords, objStatisticZero, RespSign, WordType } from "../../../functionality/api";
 import styles from "./cabinet.module.css";
 import { useLocation, useParams } from "react-router"
 
@@ -31,7 +31,7 @@ export default function Cabinet() {
 	}
 
 	function user() {
-		console.log(2, checkToken());
+		console.log(2, checkToken());		
 		getUser(userData.userId, userData.token).then(res => console.log(res));
 	}
 
@@ -53,16 +53,24 @@ export default function Cabinet() {
 
 
 	function putWord() {
-		createUserWord(userData.userId, '5e9f5ee35eb9e72bc21af4a2', 'easy', userData.token);
+		console.log(userData.userId,userData.token)
+		createUserWord(userData.userId, '5e9f5ee35eb9e72bc21af4a9', 'easy', 1, userData.token);
 	}
 
-	function getWords() {
+	function getWords() {				
 		getUserWords(userData.userId, userData.token).then(res => console.log('getWord', res));
 	}
 
 	function changeStatistic() {
 		console.log('tokenn---------', userData.token);
 		changeUserStatistic(userData.userId, userData.token, 0, objStatisticZero)
+	}
+
+	function deleteWords() {
+		getUserWords(userData.userId, userData.token).then(res => {
+			console.log('getWord', res);
+			(res as WordType[]).forEach(obj => delUserWord(userData.userId, obj.wordId, userData.token))
+		});	
 	}
 
 	return (
@@ -78,7 +86,8 @@ export default function Cabinet() {
 					<button className={styles.btn_setting} onClick={refreshToken}>refreshToken</button>
 					<button className={styles.btn_setting} onClick={changeStatistic}>changeStatistic</button>
 					<button className={styles.btn_setting} onClick={getWords}>getWords</button>
-					<button className={styles.btn_setting} onClick={putWord}>putWord</button>
+					<button className={styles.btn_setting} onClick={putWord}>putWordd</button>
+					<button className={styles.btn_setting} onClick={deleteWords}>deleteWords</button>
 					</>
 					: null}
 			</div>

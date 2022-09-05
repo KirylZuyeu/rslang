@@ -1,16 +1,14 @@
-import { LegacyRef, RefObject, useEffect, useRef, useState } from "react";
-import { getWords, getWordsByGroup } from "../../functionality/api";
+import {  RefObject, useEffect, useRef, useState } from "react";
+import { getWords } from "../../functionality/api";
 import { Word } from "../mini-game/call/Speaker/PlayCall";
-import Sppeaker from "../mini-game/call/Speaker/speackker/Sppeaker";
 import style from "./dictionary.module.css";
-import Player from "./Player";
 
 function Dictionary() {	
 	const [group, setGroup] = useState(0);
 	const [page, setPage] = useState(0);
 	const [words, setWords] = useState([] as Word[]);
 	const [urlArr, setUrlArr] = useState([] as string[]);
-	const [count, setCount] = useState(0);
+	let [count, setCount] = useState(0);
 	const [activCard, setActivCard] = useState(1);
 	const audioPlayer = useRef() as RefObject<HTMLAudioElement>;
 
@@ -19,19 +17,16 @@ function Dictionary() {
 		getWords(group, page).then(res => setWords(res))
 	}, [group, page])
 
-
-	console.log(`${group}`, `${page}`, words);
-
 	useEffect(() => {
-		console.log(words);
 		if (words.length) {
 			const audio = [`https://react-learnwords-example.herokuapp.com/${words[activCard - 1].audio}`,
 			`https://react-learnwords-example.herokuapp.com/${words[activCard - 1].audioExample}`,
-			`https://react-learnwords-example.herokuapp.com/${words[activCard - 1].audioMeaning}`]
+			`https://react-learnwords-example.herokuapp.com/${words[activCard - 1].audioMeaning}`];
 			setUrlArr(audio);
 		}
+		setCount(0);
 
-	}, [words])
+	}, [activCard, words])
 
 	const array = Array(30).fill(1);
 
@@ -42,29 +37,35 @@ function Dictionary() {
 	}
 
 	function changeActivCard(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-		console.log(e.currentTarget.id);
 		setActivCard(+e.currentTarget.id)
 	}
 
 	console.log(words, '**', count);
 
 	function playaa() {
-		console.log(audioPlayer.current?.duration, '))', count);
-		audioPlayer.current?.play()
-		if (count <= 2) {
-			setTimeout(() => {
-				setCount(count + 1);
-			}, audioPlayer.current?.duration!);
+		setCount(0);
+		audioPlayer.current?.play().then().catch(()=> {
+			audioPlayer.current!.play();
+			setCount(count = 0);
+			endAudio();
+		})
+		function endAudio() {
+			audioPlayer.current!.onended = (()=>{			
+				if(count <= 1){
+				setCount(count += 1); 
+				let playPromise = audioPlayer.current!.play();
+				if (playPromise !== undefined && count < 3) {
+					playPromise.then(res => {
+						console.log(res)
+					})
+					.catch(() => {
+						audioPlayer.current!.play()
+					});
+				  }}
+			})
 		}
+		endAudio();		
 	}
-
-
-
-
-
-
-
-
 
 	return (
 		<div className={style.dictionary}>
@@ -93,7 +94,7 @@ function Dictionary() {
 							<div style={{ backgroundImage: `url(https://react-learnwords-example.herokuapp.com/${words[activCard - 1].image})` }}
 								className={style.card_img}></div>
 							<div className={style.dinamik} onClick={playaa}>
-								<audio onClick={playaa} src={urlArr[count]} ref={audioPlayer} />
+								<audio src={urlArr[count]} ref={audioPlayer} />
 							</div>
 						</div>
 						<div className={style.card_description_titles}>

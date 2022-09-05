@@ -1,4 +1,5 @@
 
+
 const url = 'https://rslang-be-server.herokuapp.com';
 
 const words = `${url}/words`;
@@ -14,6 +15,28 @@ type DataUser = {
 type ChengeDataUser = {
 	email: string,
 	password: string
+}
+
+type ooo = {
+	sprint: {
+		arrLearnedWords: string[] | never[]
+		arrFalse: string[] | never[]
+		arrRight: string[] | never[]
+		sumRight: number
+		sumAll: number
+		period: number
+	}
+	audioCall: {
+		arrLearnedWords: string[] | never[]
+		arrFalse: string[] | never[]
+		arrRight: string[] | never[]
+		sumRight: number
+		sumAll: number
+		period: number
+	}
+	book: { arrWords: string[] | never[] }
+	arrLearnedWords: { arr: string[] }
+	date: string
 }
 
 export type OptionStatistics = {
@@ -36,7 +59,7 @@ export type OptionStatistics = {
 	book: { arrWords: string[] | never[] }
 	arrLearnedWords: { arr: string[] }
 	date: string
-	longTimeStatistic: { arr: never[] }
+	longTimeStatistic: Record<string, Record<string, ooo|number>>
 }
 
 export const objStatisticZero = {
@@ -59,7 +82,7 @@ export const objStatisticZero = {
 	book: { arrWords: [] },
 	arrLearnedWords: { arr: [] },
 	date: ' ',
-	longTimeStatistic: { arr: [] }
+	longTimeStatistic: {}
 }
 
 export type Statistic = {
@@ -74,6 +97,12 @@ export type RespSign = {
 	refreshToken: string
 	token: string
 	userId: string
+}
+
+export type WordType = {
+	difficulty: string,
+	optional: {repeat:number},
+	wordId:string
 }
 
 //=================WORDS=================
@@ -128,12 +157,12 @@ export const getUserWords = async (id: string, token: string) => (await fetch(`$
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })).json();
 
-export const createUserWord = async (userId: string, wordId: string, group: string, token: string) =>
+export const createUserWord = async (userId: string, wordId: string, group: string, repeat:number, token: string) =>
 	(await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'POST',
 		body: JSON.stringify({
 			difficulty: group,
-			optional: 1
+			optional: {repeat}
 		}),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json()
@@ -145,12 +174,12 @@ export const getUserWord = async (userId: string, wordId: string, token: string)
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json();
 
-export const changeUserWord = async (userId: string, wordId: string, group: string, token: string) =>
+export const changeUserWord = async (userId: string, wordId: string, group: string, repeat:number, token: string) =>
 	(await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'PUT',
 		body: JSON.stringify({
 			difficulty: group,
-			// optional: {} ???????????
+			optional: {repeat}
 		}),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})).json()
@@ -184,7 +213,7 @@ export const getUserStatistic = async (id: string, token: string) => await fetch
 	headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 })
 	.then(res => res.json())
-	.catch(err => console.log(err))
+	// .catch(err => console.log(err))
 
 
 export const changeUserStatistic = async (id: string, token: string, num: number, opt: OptionStatistics) =>
@@ -241,7 +270,7 @@ export const checkToken = () => {
 	if (prevTime) {
 		let t = +JSON.parse(prevTime);
 		console.log(t, 'ttt', time);
-		if ((time - t) > 50000) {
+		if ((time - t) > 5000) {
 			return false;
 		}
 		return true;

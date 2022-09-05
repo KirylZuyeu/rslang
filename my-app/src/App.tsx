@@ -12,12 +12,9 @@ import { Context } from './Context';
 import LayoutHeader from './components/loyout/LayoutHeader';
 import { useContext, useState } from 'react';
 import Statistics from './components/Statistic/Statistic';
-<<<<<<< HEAD
-import { getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
-import Learnwords from './components/LearnWords/Learn';
-=======
 import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
->>>>>>> develop
+import Learnwords from './components/LearnWords/Learn';
+
 
 
 

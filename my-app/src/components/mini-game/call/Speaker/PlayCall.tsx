@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics, RespSign, Statistic } from '../../../../functionality/api';
+import { changeUserStatistic, changeUserWord, createUserWord, getUserStatistic, getUserWords, objStatisticZero, OptionStatistics, RespSign, Statistic, WordType } from '../../../../functionality/api';
 import Modal from '../../sprint/modal/Modal';
 import Picture from './picture/Picture';
 import styles from './speackker/speaker.module.css';
@@ -40,6 +40,7 @@ export default function PlayCall(props: PropsWord) {
 	const [picShow, setPicShow] = useState(false);
 	const [allWords, setAllWords] = useState([] as string[]);
 	const [know, setKnow] = useState(true);
+	let [userWords, setUserWords] = useState([] as WordType[]);
 
 	console.log('countSeria', countSeria);
 	console.log('maxSeria', maxSeria);
@@ -138,26 +139,51 @@ export default function PlayCall(props: PropsWord) {
 		statistic.then(result => {
 			let learnedWords = result.learnedWords as number;
 			let optional = result.optional as OptionStatistics;
+			let longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
+			if (longTimeStatPrev === undefined) { longTimeStatPrev = {} }
+			console.log(longTimeStatPrev)
+
+			// const dateNow = "Sep 06 2022";
 			const dateNow = Date().split(' ').slice(1, 4).join(' ');
 			const datePrev = optional.date ? optional.date : null;
+
 			if (dateNow !== datePrev) {
 				learnedWords = 0;
 				optional = objStatisticZero;
+				optional.longTimeStatistic = longTimeStatPrev;
 			}
+			console.log('arrRightWords', arrRight);
 			const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
+
+      // const arrRightForDict = [] ///массив долгосрочных всех правильных
+
+			// for (let myProp in longTimeStatPrev) {
+			//   let key = myProp as keyof typeof longTimeStatPrev;
+			//   let value = longTimeStatPrev[key];
+			//   arrRightForDict.push(value)
+			//   console.log(value);
+			// }
+
+			// const arrRightAllServer = [{ id: 'el1', 'count': 1 }, { id: 'el2', 'count': 3 }];
+			//       const arrRightAll = rightWords.map(el => {
+			//           arrRightAllServer.find(obj => obj.id == el)
+			//           return { 'id': el, 'count': 1 }
+			//       })
 
 			const allWordsInGame = [...arrFalse, ...arrRight];
 			const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) =>
 				[...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
 			const callArrLearnedWords = optional.audioCall.arrLearnedWords;
-			const updatedSprintArrLearnedWords = [...callArrLearnedWords, ...allWordsInGame].filter((el, i) =>
+			const updatedCallArrLearnedWords = [...callArrLearnedWords, ...allWordsInGame].filter((el, i) =>
 				[...callArrLearnedWords, ...allWordsInGame].indexOf(el) === i)
 			const periodPrev = optional.audioCall.period;
 			const sumAllPrev = optional.audioCall.sumAll;
 			const sumAllRightPrev = optional.audioCall.sumRight;
+			let arrUserWordsID = [] as string[];
+			console.log(sumAllRightPrev, sumAllPrev)
 
 			optional.audioCall = {
-				arrLearnedWords: updatedSprintArrLearnedWords,
+				arrLearnedWords: updatedCallArrLearnedWords,
 				arrFalse: arrFalse,
 				arrRight: arrRight,
 				sumRight: sumAllRightPrev + arrRight.length,
@@ -167,10 +193,46 @@ export default function PlayCall(props: PropsWord) {
 			optional.arrLearnedWords.arr = updatedArrLearnedWords;
 			optional.date = dateNow;
 			learnedWords = updatedArrLearnedWords.length;
+			const optionalForLongStat = optional;
+			console.log(optional.longTimeStatistic)
+			optional.longTimeStatistic[dateNow] = {
+				learnedWords: learnedWords, optional: {
+					sprint: optionalForLongStat.sprint,
+					audioCall: optionalForLongStat.audioCall,
+					book: optionalForLongStat.book,
+					arrLearnedWords: optionalForLongStat.arrLearnedWords,
+					date: optionalForLongStat.date
+				}
+			}
+
 			getUserStatistic(userID, userToken).then(res => console.log(res))
-			console.log(userID, userToken, { learnedWords, optional })
+			console.log(optional)
 			changeUserStatistic(userID, userToken, learnedWords, optional);
-			getUserStatistic(userID, userToken).then(res => console.log(res))
+
+			getUserWords(userID, userToken).then(words => {
+				userWords = (words as WordType[]).map(el => el);
+				setUserWords(userWords);
+			});
+
+			getUserStatistic(userID, userToken).then(() => {
+				arrUserWordsID = userWords.map(el => { return el.wordId });
+				arrFalse.map(wordID => {
+					if (arrUserWordsID.includes(wordID)) {
+						changeUserWord(userID, wordID, 'simple', 1, userToken)
+					}
+				});
+
+				arrRight.map(wordID => {
+					if (arrUserWordsID.includes(wordID)) {
+						const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
+						+repeatWord < 2 ?
+							changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
+							: changeUserWord(userID, wordID, 'easy', 3, userToken);
+					} else {
+						createUserWord(userID, wordID, 'simple', 1, userToken)
+					}
+				})
+			});
 		})
 	}
 

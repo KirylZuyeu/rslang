@@ -145,10 +145,13 @@ export default function PlayCall(props: PropsWord) {
 				optional = objStatisticZero;
 			}
 			const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
+
 			const allWordsInGame = [...arrFalse, ...arrRight];
-			const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
+			const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) =>
+				[...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
 			const callArrLearnedWords = optional.audioCall.arrLearnedWords;
-			const updatedSprintArrLearnedWords = [...callArrLearnedWords, ...allWordsInGame].filter((el, i) => [...callArrLearnedWords, ...allWordsInGame].indexOf(el) === i)
+			const updatedSprintArrLearnedWords = [...callArrLearnedWords, ...allWordsInGame].filter((el, i) =>
+				[...callArrLearnedWords, ...allWordsInGame].indexOf(el) === i)
 			const periodPrev = optional.audioCall.period;
 			const sumAllPrev = optional.audioCall.sumAll;
 			const sumAllRightPrev = optional.audioCall.sumRight;

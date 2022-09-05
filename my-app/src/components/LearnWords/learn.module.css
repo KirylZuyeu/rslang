@@ -1,0 +1,160 @@
+.dictionary{
+	background: url(../../images/jpg/069962b7cc7dc933bd0181b8d9da97e9.jpg);
+	min-height: 85vh;
+	width: 100%;background-size: cover;
+	background-repeat: no-repeat;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: start;
+}
+
+.title{
+  font-size: 1.5rem;
+}
+
+.title_litle{
+	font-size: 1.3rem;
+	margin-bottom: 5px;
+}
+
+.level{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 90%;
+}
+
+.btn_wrapper{
+	margin: 0 auto;
+	padding: 2px;
+	display: flex;
+	gap: 10px;
+}
+
+.btn{
+	padding: 10px;
+	cursor: pointer;	
+}
+
+.wrapper{
+	margin-top: 10px;
+	width: 100%;
+	display: flex;	
+}
+
+.card_content{
+	width: 70%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	justify-content: space-around;
+	padding: 10px 0 0 10px;
+}
+
+.activ_card,
+.card{
+	width: 20%;
+	min-width: 135px;
+	min-height: 70px;
+	border: 3px solid rgb(111, 61, 137);
+	border-radius: 10px;
+	background: rgba(224, 224, 224, 0.578);
+	padding: 10px 5px;  
+	cursor: pointer;
+	font-size: 1.3rem;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.activ_card{
+	background: rgb(255, 255, 255);
+}
+
+.activ_card:hover,
+.card:hover{
+	background: rgb(255, 255, 255);
+}
+
+.card_description{
+	width: 30%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: bisque;
+	margin: 0 10px;
+}
+
+.card_description_top{
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.card_img{
+	width: 70%;
+	min-height: 180px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	margin-right: auto;
+}
+
+.card_description_titles_top{
+	display: flex;
+	font-weight: 700;
+	font-size: 1.3rem;
+	gap: 8px;
+}
+
+.card_description_titles{	
+	padding:0 5px;
+	border-bottom: 2px dotted rgb(52, 86, 0);
+}
+
+.card_description_titles div{
+	font-size: 1.2rem;
+	font-weight: 500;
+	display: flex;align-items: center;justify-content: center;
+}
+
+.pagination{
+	margin: auto auto 10px;
+}
+
+.list{
+	display: flex;
+	gap: 5px;	
+}
+
+.list_li{
+	list-style: none;
+}
+
+.pagination_btn{  
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	color: rgb(0, 0, 59);
+	font-size: 1.3rem;
+}
+
+.dinamik{
+	background: url(../../images/svg/speaker.svg);
+	background-repeat: no-repeat;
+	width: 100px;
+	height: 100px;
+	cursor: pointer;
+}
+
+.card_btn_level{
+	display: flex;
+	gap: 10px;
+	margin: 10px auto;
+}
+
+.card_btn{
+	padding: 5px;
+	cursor: pointer;
+}

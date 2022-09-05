@@ -47,8 +47,13 @@ export default function Cabinet() {
 	useEffect(() => {
 		console.log(111111111);
 		const a = localStorage.getItem('a')
-		setUserData(a ? JSON.parse(a) : 'aa')
+		setUserData(a ? JSON.parse(a) : 'aa');
 	}, [appContext?.isAvtorization])
+
+	// useEffect(() => {
+	// 	console.log(userData)
+	// 	getUserStatistic(userData.userId, userData.refreshToken).catch(() => changeUserStatistic(userData.userId, userData.refreshToken, 0, objStatisticZero))
+	// }, [userData])
 
 
 

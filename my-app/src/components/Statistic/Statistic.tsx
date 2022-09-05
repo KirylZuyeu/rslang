@@ -10,22 +10,28 @@ export default function Statistics() {
 	const [statistic, setStatistic] = useState({learnedWords:0, optional:objStatisticZero, longTimeStatistic: {}} as Statistic)
 	const appContext = useContext(Context);
 
-const navigate = useNavigate();
+// const navigate = useNavigate();
 
-const { fetch: originalFetch } = window;
-window.fetch = async (...args) => {
-	let [resource, config] = args;
-	let response = await originalFetch(resource, config);
-	if (!response.ok && response.status === 401) {
-		appContext?.setIsAvtorization(false);
-		localStorage.removeItem('a');
-		localStorage.removeItem('t');
-		navigate('/come-in');
-	}
-	return response;
-};
+// const { fetch: originalFetch } = window;
+// window.fetch = async (...args) => {
+// 	let [resource, config] = args;
+// 	let response = await originalFetch(resource, config);
+// 	if (!response.ok && response.status === 401) {
+// 		appContext?.setIsAvtorization(false);
+// 		localStorage.removeItem('a');
+// 		localStorage.removeItem('t');
+// 		navigate('/come-in');
+// 	}
+// 	return response;
+// };
 
 	const user = JSON.parse(localStorage.getItem('a') as string) as RespSign;
+
+	useEffect (() => {
+		if(user && getUserStatistic(user.userId, user.token) === undefined) {
+			changeUserStatistic(user.userId, user.token, 0, objStatisticZero)			
+		}
+	}, [statistic])
 
 	const userStatistics = user? (getUserStatistic(user.userId, user.token) !== undefined? getUserStatistic(user.userId, user.token) : changeUserStatistic(user.userId, user.token, 0, objStatisticZero)) : new Promise(()=> {});
 	useEffect (() => {		
@@ -50,7 +56,6 @@ window.fetch = async (...args) => {
 	const learnedWords = statistic.learnedWords;
 	const sumRightGames = statistic.optional.sprint.sumRight + statistic.optional.audioCall.sumRight;
 	const sumAllWordsGames = statistic.optional.sprint.sumAll + statistic.optional.audioCall.sumAll;
-	
 
 	return (
 		<div className={styles.statistics}>

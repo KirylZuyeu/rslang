@@ -13,7 +13,7 @@ import { Context } from './Context';
 import LayoutHeader from './components/loyout/LayoutHeader';
 import { useContext, useState } from 'react';
 import Statistics from './components/Statistic/Statistic';
-import { getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
+import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
 
 
 
@@ -28,6 +28,7 @@ function App() {
 		const user = localStorage.getItem('a') as string;
 		const userID = JSON.parse(user).userId;
 		const userToken = JSON.parse(user).token;
+		getUserStatistic(userID , userToken).catch(() => changeUserStatistic(userID , userToken, 0, objStatisticZero))
 		const statistic = getUserStatistic(userID, userToken);    
 		statistic.then(result => { 
 			console.log(result);   

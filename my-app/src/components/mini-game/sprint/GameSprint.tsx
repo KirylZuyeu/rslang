@@ -136,7 +136,11 @@ function GameSprint(props:Props) {
     statistic.then(result => {     
       let learnedWords = result.learnedWords as number;      
       let optional = result.optional as OptionStatistics;
-      const longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
+      let longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
+      if(longTimeStatPrev === undefined) {longTimeStatPrev = {}}
+      console.log(longTimeStatPrev)
+
+      // const dateNow = "Sep 06 2022";
       const dateNow = Date().split(' ').slice(1,4).join(' ');
       const datePrev = optional.date? optional.date : null;
       
@@ -145,8 +149,24 @@ function GameSprint(props:Props) {
         optional = objStatisticZero;
         optional.longTimeStatistic = longTimeStatPrev;
       }
-      console.log('arrRightWords',rightWords);
+      console.log('arrRightWords', rightWords);
       const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
+
+      // const arrRightForDict = [] ///массив долгосрочных всех правильных
+
+      // for (let myProp in longTimeStatPrev) {
+      //   let key = myProp as keyof typeof longTimeStatPrev;
+      //   let value = longTimeStatPrev[key];
+      //   arrRightForDict.push(value)
+      //   console.log(value);
+      // }
+
+      // const arrRightAllServer = [{ id: 'el1', 'count': 1 }, { id: 'el2', 'count': 3 }];
+      //       const arrRightAll = rightWords.map(el => {
+      //           arrRightAllServer.find(obj => obj.id == el)
+      //           return { 'id': el, 'count': 1 }
+      //       })
+
       const allWordsInGame = [...mistakenWords, ...rightWords];
       const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
       const sprintArrLearnedWords = optional.sprint.arrLearnedWords;
@@ -169,12 +189,12 @@ function GameSprint(props:Props) {
       optional.date = dateNow;      
       learnedWords = updatedArrLearnedWords.length;
       const optionalForLongStat = optional;
-      console.log(optional.longTimeStatistic, )
-      optional.longTimeStatistic = {[dateNow]:{learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
+      console.log(optional.longTimeStatistic)    
+      optional.longTimeStatistic[dateNow] = {learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
       audioCall: optionalForLongStat.audioCall,
       book: optionalForLongStat.book,
       arrLearnedWords: optionalForLongStat.arrLearnedWords,
-      date: optionalForLongStat.date}}}
+      date: optionalForLongStat.date}}
 
       getUserStatistic(userID, userToken).then(res => console.log(res))
       console.log(optional)

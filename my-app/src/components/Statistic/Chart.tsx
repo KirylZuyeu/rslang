@@ -2,7 +2,7 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 import { ChartOptions } from 'chart.js'
 
-const Chart = () => {
+function Chart() {
   const lineChartData = {
     labels: ["October", "November", "December"],
     datasets: [
@@ -24,15 +24,15 @@ const Chart = () => {
     ]
   };
 
-  return (
+  return (    
     <Line
-    //   type="line"
+      // type="line"
       width={160}
       height={60}
       options={{
         // title: {
         //   display: true,
-        //   text: "COVID-19 Cases of Last 6 Months",
+        //   text: "COVID-19 Cases of Last 6 Months" as const,
         //   fontSize: 20
         // },
         // legend: {
@@ -42,6 +42,7 @@ const Chart = () => {
       }}
       data={lineChartData}
     />
+   
   );
 };
 export default Chart;

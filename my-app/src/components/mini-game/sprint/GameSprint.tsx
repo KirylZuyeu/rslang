@@ -96,7 +96,7 @@ function GameSprint(props:Props) {
         setCountLearnedWords(countLearnedWords = 0);
       }else{
       arrRightWords.push(idWordInCard);
-      setrightWords(arrRightWords);
+      setrightWords(arrRightWords);      
       setCountLearnedWords(countLearnedWords += 1);
       setFlagIncreasePoint(true);
       setTimeout(()=> {setFlagIncreasePoint(false)},1000);
@@ -112,7 +112,7 @@ function GameSprint(props:Props) {
         setCountLearnedWords(countLearnedWords = 0);
       }else{
       arrRightWords.push(idWordInCard);
-      setrightWords(arrRightWords);      
+      setrightWords(arrRightWords);     
       setCountLearnedWords(countLearnedWords += 1);
       setFlagIncreasePoint(true);
       setTimeout(()=> {setFlagIncreasePoint(false)},1000);
@@ -145,6 +145,7 @@ function GameSprint(props:Props) {
         optional = objStatisticZero;
         optional.longTimeStatistic = longTimeStatPrev;
       }
+      console.log('arrRightWords',rightWords);
       const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
       const allWordsInGame = [...mistakenWords, ...rightWords];
       const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
@@ -168,47 +169,39 @@ function GameSprint(props:Props) {
       optional.date = dateNow;      
       learnedWords = updatedArrLearnedWords.length;
       const optionalForLongStat = optional;
-      optional.longTimeStatistic = {dateNow:{learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
+      console.log(optional.longTimeStatistic, )
+      optional.longTimeStatistic = {[dateNow]:{learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
       audioCall: optionalForLongStat.audioCall,
       book: optionalForLongStat.book,
       arrLearnedWords: optionalForLongStat.arrLearnedWords,
-      date: optionalForLongStat.date}}}            
+      date: optionalForLongStat.date}}}
+
       getUserStatistic(userID, userToken).then(res => console.log(res))
-      console.log(userID, userToken, {learnedWords, optional})
+      console.log(optional)
       changeUserStatistic(userID, userToken, learnedWords, optional);
+
       getUserWords(userID, userToken).then(words=> {
         userWords = (words as WordType[]).map(el=>el);
         setUserWords(userWords);
       });
 
-      getUserStatistic(userID, userToken).then(res => {
-        console.log(res);
-        const arrFalseSprint =  res.optional.sprint.arrFalse as string[];
-        const arrRightSprint =  res.optional.sprint.arrRight as string[];
-        // getUserWords(userID, userToken).then(words => {
-        //   userWords = (words as WordType[]).map(el=>el);
-        //   setUserWords(userWords);
-        //   arrUserWordsID = userWords.map(el => {return el.wordId});
-        // });
+      getUserStatistic(userID, userToken).then(() => {
 
         arrUserWordsID = userWords.map(el => {return el.wordId});        
     
-        arrFalseSprint.map(wordID => {
+        mistakenWords.map(wordID => {
           if(arrUserWordsID.includes(wordID)){
             changeUserWord(userID, wordID, 'simple', 1, userToken)
           }          
         });
         
-        arrRightSprint.map(wordID => {
-          console.log(arrUserWordsID);
-          console.log(arrRightSprint);
+        rightWords.map(wordID => {
           if(arrUserWordsID.includes(wordID)) {
             const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
-            +repeatWord < 3?
+            +repeatWord < 2?
             changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
-            : changeUserWord(userID, wordID, 'easy', 4, userToken);            
+            : changeUserWord(userID, wordID, 'easy', 3, userToken);            
           } else {
-            console.log(arrUserWordsID.includes(wordID), wordID)
             createUserWord(userID, wordID, 'simple', 1, userToken)
           }
         })

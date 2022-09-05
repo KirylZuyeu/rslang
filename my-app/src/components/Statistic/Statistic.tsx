@@ -1,4 +1,5 @@
-import Chart from './Chart';
+import ChartBar from './Chart';
+import ChartProgres from './ChartProgres';
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Context } from "../../Context";
@@ -87,9 +88,13 @@ export default function Statistics() {
 				</div>
 			</div>
 		  </section>
-		  <section className={styles.statistic_all_wrapper}>
-			{/* <Chart /> */}
-		  </section>
+
+		  {statistic.optional.longTimeStatistic ? 
+			<section className={styles.statistic_all_wrapper}>
+				<ChartBar settings={statistic}/>
+				<ChartProgres settings={statistic}/>
+			</section>
+			: 'Для отражения статистики, нужно сыграть в мини-игры.'}
 				</>}
 		</div>
 	)

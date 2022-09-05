@@ -144,7 +144,7 @@ function GameSprint(props:Props) {
       const dateNow = Date().split(' ').slice(1,4).join(' ');
       const datePrev = optional.date? optional.date : null;
       
-      if (dateNow !== datePrev) {console.log('111')
+      if (dateNow !== datePrev) {
         learnedWords = 0;
         optional = objStatisticZero;
         optional.longTimeStatistic = longTimeStatPrev;

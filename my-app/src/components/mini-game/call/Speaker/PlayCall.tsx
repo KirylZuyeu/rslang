@@ -42,14 +42,10 @@ export default function PlayCall(props: PropsWord) {
 	const [know, setKnow] = useState(true);
 	let [userWords, setUserWords] = useState([] as WordType[]);
 
-	console.log('countSeria', countSeria);
-	console.log('maxSeria', maxSeria);
-
 	useEffect(() => {
 		setWords(props.words)
 	}, [props.words])
 
-	console.log(words);
 
 	const rndNumbers = () => {
 		const result = [];
@@ -66,7 +62,6 @@ export default function PlayCall(props: PropsWord) {
 
 	const playWord = () => {
 		if (words.length > count) {
-			console.log('----', words[count].word);
 			new Audio(`https://react-learnwords-example.herokuapp.com/${words[count].audio}`).play();
 		}
 	}
@@ -113,7 +108,6 @@ export default function PlayCall(props: PropsWord) {
 				}
 				setArrRight(arr => [...arr, `${id}`]);
 				setCountSeria(countSeria + 1);
-				console.log('=======', countSeria);
 
 			} else {
 				if (!allWords.includes(words[count].id)) {
@@ -141,7 +135,6 @@ export default function PlayCall(props: PropsWord) {
 			let optional = result.optional as OptionStatistics;
 			let longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
 			if (longTimeStatPrev === undefined) { longTimeStatPrev = {} }
-			console.log(longTimeStatPrev)
 
 			// const dateNow = "Sep 06 2022";
 			const dateNow = Date().split(' ').slice(1, 4).join(' ');
@@ -152,7 +145,6 @@ export default function PlayCall(props: PropsWord) {
 				optional = objStatisticZero;
 				optional.longTimeStatistic = longTimeStatPrev;
 			}
-			console.log('arrRightWords', arrRight);
 			const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
 
       // const arrRightForDict = [] ///массив долгосрочных всех правильных
@@ -180,7 +172,6 @@ export default function PlayCall(props: PropsWord) {
 			const sumAllPrev = optional.audioCall.sumAll;
 			const sumAllRightPrev = optional.audioCall.sumRight;
 			let arrUserWordsID = [] as string[];
-			console.log(sumAllRightPrev, sumAllPrev)
 
 			optional.audioCall = {
 				arrLearnedWords: updatedCallArrLearnedWords,
@@ -194,7 +185,6 @@ export default function PlayCall(props: PropsWord) {
 			optional.date = dateNow;
 			learnedWords = updatedArrLearnedWords.length;
 			const optionalForLongStat = optional;
-			console.log(optional.longTimeStatistic)
 			optional.longTimeStatistic[dateNow] = {
 				learnedWords: learnedWords, optional: {
 					sprint: optionalForLongStat.sprint,
@@ -205,8 +195,7 @@ export default function PlayCall(props: PropsWord) {
 				}
 			}
 
-			getUserStatistic(userID, userToken).then(res => console.log(res))
-			console.log(optional)
+			getUserStatistic(userID, userToken).then(res => console.log(res))			
 			changeUserStatistic(userID, userToken, learnedWords, optional);
 
 			getUserWords(userID, userToken).then(words => {
@@ -242,18 +231,8 @@ export default function PlayCall(props: PropsWord) {
 				setMaxSeria(countSeria)
 			}
 			updateStatistics();
-			console.log('-----===', arrRight, arrFalse);
 		}
 	}, [words.length <= count])
-
-
-
-
-
-
-	if (words.length <= count && modalOpen) {
-		console.log('openMod', allWords);
-	}
 
 	return (
 

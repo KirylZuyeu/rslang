@@ -12,10 +12,10 @@ function AudioCall() {
 
 	const levels = [0, 1, 2, 3, 4, 5];
 
-
 	useEffect(() => {
-		setWords([]);
-		const res = getWords(num, 1);
+		setWords([]);		
+		const rand = Math.floor(Math.random() * 30) + 1;
+		const res = getWords(num, rand);
 		res.then(
 			(result) => {
 				let res
@@ -31,7 +31,7 @@ function AudioCall() {
 				setError(error);
 			}
 		)
-	}, [num]);
+	}, [num, start]);
 
 
 

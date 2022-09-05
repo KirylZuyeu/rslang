@@ -136,8 +136,13 @@
 	border: none;
 	background-color: transparent;
 	cursor: pointer;
-	color: rgb(0, 0, 59);
+	color: rgb(212, 212, 225);
 	font-size: 1.3rem;
+	background-color: rgb(65, 67, 65);
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	margin-top: 10px;
 }
 
 .dinamik{

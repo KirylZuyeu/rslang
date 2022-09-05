@@ -77,13 +77,13 @@ export default function Statistics() {
 				<div className={styles.game_sprint}>
 					<h3>Cпринт</h3>
 					<h4>Пройдено новых слов: {statistic.optional.sprint.arrLearnedWords.length}</h4>
-					<h4>Правильных ответов: {statistic.optional.sprint.sumAll === 0? 0 : Math.round(statistic.optional.sprint.sumRight/statistic.optional.sprint.sumAll *100)} %</h4>
+							<h4>Правильных ответов: {statistic.optional.sprint.sumAll === 0 ? 0 : Math.round(statistic.optional.sprint.sumRight / statistic.optional.sprint.sumAll * 100)} %</h4>
 					<h4>Самая длинная серия правильных ответов: {statistic.optional.sprint.period}</h4>
 				</div>
 				<div className={styles.game_audioCall}>
 				    <h3>Аудиовызов</h3>
 					<h4>Пройдено новых слов: {statistic.optional.audioCall.arrLearnedWords.length}</h4>
-					<h4>Правильных ответов: {statistic.optional.audioCall.period === 0? 0 : Math.round(statistic.optional.audioCall.arrRight.length/(statistic.optional.audioCall.arrRight.length + statistic.optional.audioCall.arrFalse.length)*100)} %</h4>
+							<h4>Правильных ответов: {statistic.optional.audioCall.sumAll === 0 ? 0 : Math.round(statistic.optional.audioCall.sumRight / statistic.optional.audioCall.sumAll * 100)} %</h4>
 					<h4>Самая длинная серия правильных ответов: {statistic.optional.audioCall.period}</h4>
 				</div>
 			</div>

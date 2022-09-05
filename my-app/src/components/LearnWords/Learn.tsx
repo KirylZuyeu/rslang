@@ -130,10 +130,11 @@ function Learnwords() {
 							<div>{words[activCard - 1].transcription}</div>
 							<div>{words[activCard - 1].wordTranslate}</div>
 						</div>
+						{appContext?.isAvtorization ? 
 						<div className={style.card_btn_level}>
 							<button className={style.card_btn} onClick={addEseWord}>Добавить в Изученные</button>
 							<button className={style.card_btn} onClick={addHardWord}>Добавить в Сложные</button>
-						</div>
+							</div> : null}
 						<p className={style.card_description_titles} dangerouslySetInnerHTML={{ __html: words[activCard - 1].textExample }}></p>
 						<p className={style.card_description_titles}>
 							{words[activCard - 1].textExampleTranslate}

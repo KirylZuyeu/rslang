@@ -19,16 +19,13 @@ ChartJS.register(
   Legend
 );
 
-export default function ChartBar(props:any) {
-
+export default function ChartProgres(props:any) {
   const datesASD = Object.entries(props.settings.optional.longTimeStatistic).map(([key, value]) => ({key,value}))
   
   const arrDates = datesASD.sort(
     (objA, objB) => new Date(objA.key).getTime() - new Date(objB.key).getTime(),
   );
-  console.log(arrDates)
-
-  const options = {
+  const options: any = {
     responsive: true,
     plugins: {
       legend: {
@@ -40,9 +37,10 @@ export default function ChartBar(props:any) {
           }
       }
       },
+      
       title: {
         display: true,
-        text: 'Количество новых слов за каждый день изучения',
+        text: 'Увеличение общего количества изученных слов за весь период обучения по дням',
         font: {
           size: '30',
           family: 'Arial, Helvetica, sans-serif',
@@ -53,14 +51,23 @@ export default function ChartBar(props:any) {
   };
 
   const labels = [...arrDates.map(item => item.key)];
-  const countOfLearningWords = [...arrDates.map(item => (item.value as any).learnedWords)];
+
+  let prev:number;
+
+  const countOfLearningWords = [...arrDates.map(item => (item.value as any).learnedWords)].map(item => {
+    const val = item - (prev || 0);
+    prev = item;
+    item = val;
+    return item > 0 ? item : 0;
+  });
+
   const data = {
     labels,
     datasets: [
       {
-        label: 'Количество слов',
+        label: 'Количество слов - прогресс',
         data: countOfLearningWords,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: 'rgba(115, 59, 182, 0.5)',
       },
     ],
   };

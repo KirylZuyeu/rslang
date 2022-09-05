@@ -1,3 +1,4 @@
+import Chart from './Chart';
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Context } from "../../Context";
@@ -7,6 +8,7 @@ import styles from "./statistic.module.css";
 export default function Statistics() {
 	const [statistic, setStatistic] = useState({learnedWords:0, optional:objStatisticZero, longTimeStatistic: {}} as Statistic)
 	const appContext = useContext(Context);
+	const [a, setA] = useState({})
 
 const navigate = useNavigate();
 
@@ -25,6 +27,16 @@ window.fetch = async (...args) => {
 
 	const user = JSON.parse(localStorage.getItem('a') as string) as RespSign;
 
+	useEffect (() => {
+		if(user && getUserStatistic(user.userId, user.token) !== undefined) {
+			changeUserStatistic(user.userId, user.token, 0, objStatisticZero)			
+		}
+	}, [statistic])
+
+	// if(user && getUserStatistic(user.userId, user.token) !== undefined) {
+	// 	changeUserStatistic(user.userId, user.token, 0, objStatisticZero)			
+	// };
+
 	const userStatistics = user? (getUserStatistic(user.userId, user.token) !== undefined? getUserStatistic(user.userId, user.token) : changeUserStatistic(user.userId, user.token, 0, objStatisticZero)) : new Promise(()=> {});
 	useEffect (() => {		
 		userStatistics.then(res => {
@@ -42,18 +54,20 @@ window.fetch = async (...args) => {
 			} else {
 				setStatistic(res);
 			}
-
-			// setStatistic(res);
 		})
 	}, []);
 
 	const learnedWords = statistic.learnedWords;
 	const sumRightGames = statistic.optional.sprint.sumRight + statistic.optional.audioCall.sumRight;
 	const sumAllWordsGames = statistic.optional.sprint.sumAll + statistic.optional.audioCall.sumAll;
+	
+	getUserStatistic(user.userId, user.token).then(res => setA(res.optional.longTimeStatistic));
+	console.log(a)
 
 	return (
 		<div className={styles.statistics}>
-			{!appContext?.isAvtorization ? <div>Для доступа к статистике необходимо авторизоваться</div>
+			{!appContext?.isAvtorization ? 
+			<div>Для доступа к статистике необходимо авторизоваться</div>
 				: <><section className={styles.statistic_today_wrapper}>
 			<h2>Статистика за сегодня</h2>
 			<div className={styles.today_info}>
@@ -81,7 +95,9 @@ window.fetch = async (...args) => {
 				</div>
 			</div>
 		  </section>
-		  <section className={styles.statistic_all_wrapper}></section>
+		  <section className={styles.statistic_all_wrapper}>
+			{/* <Chart /> */}
+		  </section>
 				</>}
 		</div>
 	)

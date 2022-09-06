@@ -9,9 +9,8 @@ export default function Team() {
 				<div className={styles.photo_kiryl}></div>
 				<div className={styles.text}>
 					<ul>
-						<li>Создание копии бэкэнда</li>
-
-
+						<li>Дополнительный функционал</li>
+						<li>Создание копии бэкенда</li>
 					</ul>
 				</div>
 				<Link to={'https://github.com/KirylZuyeu'} className={styles.link}>Kiryl GitHub</Link>
@@ -24,7 +23,6 @@ export default function Team() {
 						<li>Мини-игра "Спринт"</li>
 						<li>Прогресс изучения</li>
 						<li>Страница статистики</li>
-						<li>Дополнительный функционал</li>
 					</ul>
 				</div>
 				<Link to={'https://github.com/katusha-2010'} className={styles.link}>Katya GitHub</Link>
@@ -41,7 +39,7 @@ export default function Team() {
 					</ul>
 				</div>
 				<Link to={'https://github.com/Oleegg'} className={styles.link}>Oleg GitHub</Link>
-			</div>			
+			</div>
 		</div>
 	)
 }

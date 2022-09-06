@@ -1,15 +1,21 @@
-import {  RefObject, useEffect, useRef, useState } from "react";
-import { getWords } from "../../functionality/api";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
+import { Context, ContextUser } from "../../Context";
+import { createUserWord, getUserWords, getWords, RespSign, UserWord } from "../../functionality/api";
 import { Word } from "../mini-game/call/Speaker/PlayCall";
-import style from "./dictionary.module.css";
+import style from "./learn.module.css";
 
-function Dictionary() {	
+function Learnwords() {
 	const [group, setGroup] = useState(0);
 	const [page, setPage] = useState(0);
 	const [words, setWords] = useState([] as Word[]);
+	// const [userWords, setUserWords] = useState([] as UserWord[]);
+	const [userWordsEasy, setUserWordsEasy] = useState([] as string[]);
+	const [userWordsHard, setUserWordsHard] = useState([] as string[]);
 	const [urlArr, setUrlArr] = useState([] as string[]);
 	let [count, setCount] = useState(0);
 	const [activCard, setActivCard] = useState(1);
+	const [userData, setUserData] = useState({} as RespSign)
+	const appContext = useContext(Context)
 	const audioPlayer = useRef() as RefObject<HTMLAudioElement>;
 
 
@@ -25,8 +31,12 @@ function Dictionary() {
 			setUrlArr(audio);
 		}
 		setCount(0);
-
 	}, [activCard, words])
+
+	useEffect(() => {
+		const a = localStorage.getItem('a')
+		setUserData(a ? JSON.parse(a) : 'aa')
+	}, [appContext?.isAvtorization])
 
 	const array = Array(30).fill(1);
 
@@ -44,28 +54,46 @@ function Dictionary() {
 
 	function playaa() {
 		setCount(0);
-		audioPlayer.current?.play().then().catch(()=> {
+		audioPlayer.current?.play().then().catch(() => {
 			audioPlayer.current!.play();
 			setCount(count = 0);
 			endAudio();
 		})
 		function endAudio() {
-			audioPlayer.current!.onended = (()=>{			
-				if(count <= 1){
-				setCount(count += 1); 
-				let playPromise = audioPlayer.current!.play();
-				if (playPromise !== undefined && count < 3) {
-					playPromise.then(res => {
-						console.log(res)
-					})
-					.catch(() => {
-						audioPlayer.current!.play()
-					});
-				  }}
+			audioPlayer.current!.onended = (() => {
+				if (count <= 1) {
+					setCount(count += 1);
+					let playPromise = audioPlayer.current!.play();
+					if (playPromise !== undefined && count < 3) {
+						playPromise.then(res => {
+							console.log(res)
+						})
+							.catch(() => {
+								audioPlayer.current!.play()
+							});
+					}
+				}
 			})
 		}
-		endAudio();		
+		endAudio();
 	}
+
+
+
+	async function addEseWord() {
+		const userWords = [] as string[]
+		await getUserWords(userData.userId, userData.token).then(res => userWords.push(res.forEach((el: UserWord) => {
+			userWords.push(el.id)
+		})))
+		console.log(userWords);
+
+	}
+
+	function addHardWord() {
+
+	}
+
+
 
 	return (
 		<div className={style.dictionary}>
@@ -97,24 +125,21 @@ function Dictionary() {
 								<audio src={urlArr[count]} ref={audioPlayer} />
 							</div>
 						</div>
-						<div className={style.card_description_titles}>
+						<div className={style.card_description_titles_top}>
 							<div>{words[activCard - 1].word}</div>
 							<div>{words[activCard - 1].transcription}</div>
 							<div>{words[activCard - 1].wordTranslate}</div>
 						</div>
+						{appContext?.isAvtorization ? 
 						<div className={style.card_btn_level}>
-							<button>add easy</button>
-							<button>add hard</button>
-						</div>
-						<p className={style.card_description_titles}>
-							{words[activCard - 1].textExample}
-						</p>
+							<button className={style.card_btn} onClick={addEseWord}>Добавить в Изученные</button>
+							<button className={style.card_btn} onClick={addHardWord}>Добавить в Сложные</button>
+							</div> : null}
+						<p className={style.card_description_titles} dangerouslySetInnerHTML={{ __html: words[activCard - 1].textExample }}></p>
 						<p className={style.card_description_titles}>
 							{words[activCard - 1].textExampleTranslate}
 						</p>
-						<p className={style.card_description_titles}>
-							{`${words[activCard - 1].textMeaning}`}
-						</p>
+						<p className={style.card_description_titles} dangerouslySetInnerHTML={{ __html: words[activCard - 1].textMeaning }}></p>
 						<p className={style.card_description_titles}>
 							{words[activCard - 1].textMeaningTranslate}
 						</p>
@@ -136,4 +161,4 @@ function Dictionary() {
 	)
 }
 
-export default Dictionary
+export default Learnwords

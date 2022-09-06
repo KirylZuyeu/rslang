@@ -5,8 +5,7 @@ import Team from './components/team/team';
 import Game from './pages/Game/game';
 import Sprint from './components/mini-game/sprint/Sprint';
 import AudioCall from './components/mini-game/call/audioCall';
-import Learn from './components/Learn-Words/Learn';
-import Dictionary from './components/Dictionary/Dictionary';
+import Dictionary from './components/Dictionary/Dictionaty';
 import Autorization from './pages/authorization/autorization';
 import Cabinet from './components/header/Cabinet/Cabinet';
 import { Context } from './Context';
@@ -14,6 +13,8 @@ import LayoutHeader from './components/loyout/LayoutHeader';
 import { useContext, useState } from 'react';
 import Statistics from './components/Statistic/Statistic';
 import { changeUserStatistic, getUserStatistic, objStatisticZero, OptionStatistics } from './functionality/api';
+import Learnwords from './components/LearnWords/Learn';
+
 
 
 
@@ -30,6 +31,7 @@ function App() {
 		const userToken = JSON.parse(user).token;
 		getUserStatistic(userID , userToken).catch(() => changeUserStatistic(userID , userToken, 0, objStatisticZero))
 		const statistic = getUserStatistic(userID, userToken);    
+
 		statistic.then(result => { 
 			console.log(result);   
 		  let learnedWords = result.learnedWords as number;      
@@ -52,7 +54,7 @@ function App() {
 					<Route path='/' element={<Layout />}>
 						<Route index element={<MainPage />} />
 						<Route path='/team' element={<Team />} />
-						<Route path='/learn-words' element={<Learn />} />
+						<Route path='/learn-words' element={<Learnwords />} />
 						<Route path='/statistics' element={<Statistics />} />
 						<Route path='/dictionary' element={<Dictionary />} />
 						<Route path="/come-in" element={<Autorization />} />

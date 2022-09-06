@@ -1,3 +1,4 @@
+import { type } from "@testing-library/user-event/dist/type";
 
 
 const url = 'https://rslang-be-server.herokuapp.com';
@@ -15,6 +16,14 @@ type DataUser = {
 type ChengeDataUser = {
 	email: string,
 	password: string
+}
+
+export type UserWord = {
+	difficulty: string,
+	id: string,
+	optional: {
+		repeat: number
+	}
 }
 
 type ooo = {
@@ -271,12 +280,12 @@ export const checkToken = () => {
 	if (prevTime) {
 		let t = +JSON.parse(prevTime);
 		console.log(t, 'ttt', time);
-		if ((time - t) > 5000) {
+		if ((time - t) > 14400000) {
 			return false;
 		}
 		return true;
 	}
 }
 
-//14400000
+
 

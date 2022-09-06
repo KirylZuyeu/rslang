@@ -17,6 +17,7 @@
 
 .nav{
 	display: flex;
+	align-items: center;
 }
 
 .nav_link{

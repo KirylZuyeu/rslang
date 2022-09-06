@@ -1,0 +1,35 @@
+.header{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: rgb(122, 174, 186);
+	padding: 0 20px;
+}
+
+.header_title{
+	margin-right: 20px;	
+}
+
+.title{
+	color: darkmagenta;
+	text-decoration: none;
+}
+
+.nav{
+	display: flex;
+	align-items: center;
+}
+
+.nav_link{
+	margin-left: 15px;
+	color: darkmagenta;
+	text-decoration: none;
+}
+
+.cabinet_pic{
+	background: url(../../images/svg/account_avatar.svg);
+	width: 30px;
+	height: 30px;
+	border: 2px solid black;
+	border-radius: 50%;
+}

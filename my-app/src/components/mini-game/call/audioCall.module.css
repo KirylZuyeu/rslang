@@ -1,0 +1,31 @@
+.call{
+	width: 100%;
+	min-height: 85vh;
+	background: url(../../../images/gif/7RQk.gif);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.call_title{
+	margin: 0;
+	margin: 10px 0 20px;
+	color: black;
+}
+
+.play_call{
+	min-height: 75vh;
+	background: url(../../../images/gif/7RQk.gif);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	justify-content: center;
+}
+
+.btn_start_call{
+	padding: 5px;
+}

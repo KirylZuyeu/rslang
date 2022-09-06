@@ -1,0 +1,58 @@
+.team{
+	background: url(../../images/jpg/downloadteam.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	min-height: 85vh;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.card{
+width: 30%;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.title{
+ color: aliceblue;
+}
+
+.photo_katya,
+.photo_kiryl,
+.photo_oleg{
+	background-repeat: no-repeat;
+	min-height: 50%;
+	width: 90%;
+	margin: 0 auto;
+	background-position: center;
+		background-size: cover;
+
+}
+
+.photo_katya{
+	background-image: url(../../images/jpg/iconfinder-4-avatar-2754580_120522.png);
+}
+
+.photo_kiryl{
+	background-image: url(../../images/jpg/iconfinder-3-avatar-2754579_120516.png);
+}
+
+.photo_oleg{
+	background-image: url(../../images/jpg/iconfinder-7-avatar-2754582_120519.png);
+}
+
+.text{
+ color: antiquewhite;
+}
+
+.link{
+	text-decoration: none;
+	color: rgb(238, 247, 255);
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin: auto auto 10px;
+}
+

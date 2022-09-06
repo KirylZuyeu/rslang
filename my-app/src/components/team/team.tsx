@@ -8,6 +8,11 @@ export default function Team() {
 				<h2 className={styles.title}>Kiryl</h2>
 				<div className={styles.photo_kiryl}></div>
 				<div className={styles.text}>
+					<ul>
+						<li>Создание копии бэкэнда</li>
+
+
+					</ul>
 				</div>
 				<Link to={'https://github.com/KirylZuyeu'} className={styles.link}>Kiryl GitHub</Link>
 			</div>

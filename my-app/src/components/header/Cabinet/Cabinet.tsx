@@ -32,11 +32,11 @@ export default function Cabinet() {
 
 	function user() {
 		console.log(2, checkToken());		
-		getUser(userData.userId, userData.token).then(res => console.log(res));
+		getUser("63028e49e73afb00165213c1", userData.token).then(res => console.log(res));
 	}
 
 	function statistic() {
-		getUserStatistic(userData.userId, userData.token).then(res => console.log(res))
+		getUserStatistic("63028e49e73afb00165213p1", userData.token).then(res => console.log(res))
 	}
 
 	function refreshToken() {

@@ -80,6 +80,7 @@ function GameSprint(props:Props) {
   const wordInCard = props.base[indexObj.word].word;
   const wordTranslatedInCard = props.base[indexObj.translatedWord].wordTranslate;
   const idWordInCard = props.base[indexObj.word].id as string;
+  const [doMistake, setDoMistake] = useState(false);
   let [userWords, setUserWords] = useState([] as WordType[]);
 
   function resultLearningWord(increase:number, btn:boolean) {
@@ -94,13 +95,15 @@ function GameSprint(props:Props) {
         setRightAnswers(0);
         increase = 0;
         setCountLearnedWords(countLearnedWords = 0);
+        setDoMistake(true);
       }else{
       arrRightWords.push(idWordInCard);
       setrightWords(arrRightWords);      
       setCountLearnedWords(countLearnedWords += 1);
       setFlagIncreasePoint(true);
       setTimeout(()=> {setFlagIncreasePoint(false)},1000);
-      setRightAnswers(rightAnswers += 1);    
+      setRightAnswers(rightAnswers += 1);
+      setDoMistake(false);    
       }
     } else { 
       if(btn === true) {
@@ -110,13 +113,15 @@ function GameSprint(props:Props) {
         setRightAnswers(0);
         increase = 0;
         setCountLearnedWords(countLearnedWords = 0);
+        setDoMistake(true);
       }else{
       arrRightWords.push(idWordInCard);
       setrightWords(arrRightWords);     
       setCountLearnedWords(countLearnedWords += 1);
       setFlagIncreasePoint(true);
       setTimeout(()=> {setFlagIncreasePoint(false)},1000);
-      setRightAnswers(rightAnswers += 1);     
+      setRightAnswers(rightAnswers += 1);
+      setDoMistake(false);     
       }
     }
     setMessageIcrease(currentIncrease);
@@ -138,9 +143,7 @@ function GameSprint(props:Props) {
       let optional = result.optional as OptionStatistics;
       let longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
       if(longTimeStatPrev === undefined) {longTimeStatPrev = {}}
-      console.log(longTimeStatPrev)
 
-      // const dateNow = "Sep 06 2022";
       const dateNow = Date().split(' ').slice(1,4).join(' ');
       const datePrev = optional.date? optional.date : null;
       
@@ -148,24 +151,8 @@ function GameSprint(props:Props) {
         learnedWords = 0;
         optional = objStatisticZero;
         optional.longTimeStatistic = longTimeStatPrev;
-      }
-      console.log('arrRightWords', rightWords);
+      } 
       const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
-
-      // const arrRightForDict = [] ///массив долгосрочных всех правильных
-
-      // for (let myProp in longTimeStatPrev) {
-      //   let key = myProp as keyof typeof longTimeStatPrev;
-      //   let value = longTimeStatPrev[key];
-      //   arrRightForDict.push(value)
-      //   console.log(value);
-      // }
-
-      // const arrRightAllServer = [{ id: 'el1', 'count': 1 }, { id: 'el2', 'count': 3 }];
-      //       const arrRightAll = rightWords.map(el => {
-      //           arrRightAllServer.find(obj => obj.id == el)
-      //           return { 'id': el, 'count': 1 }
-      //       })
 
       const allWordsInGame = [...mistakenWords, ...rightWords];
       const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) => [...arrLearnedWordsPrev, ...allWordsInGame].indexOf(el) === i)
@@ -175,7 +162,6 @@ function GameSprint(props:Props) {
       const sumAllPrev = optional.sprint.sumAll;
       const sumAllRightPrev = optional.sprint.sumRight;
       let arrUserWordsID = [] as string[];
-      console.log(sumAllRightPrev, sumAllPrev)
 
       optional.sprint = {
         arrLearnedWords: updatedSprintArrLearnedWords,
@@ -188,44 +174,43 @@ function GameSprint(props:Props) {
       optional.arrLearnedWords.arr = updatedArrLearnedWords;
       optional.date = dateNow;      
       learnedWords = updatedArrLearnedWords.length;
-      const optionalForLongStat = optional;
-      console.log(optional.longTimeStatistic)    
-      optional.longTimeStatistic[dateNow] = {learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
-      audioCall: optionalForLongStat.audioCall,
-      book: optionalForLongStat.book,
-      arrLearnedWords: optionalForLongStat.arrLearnedWords,
-      date: optionalForLongStat.date}}
+      // const optionalForLongStat = Object.assign({}, optional);   
+      // optional.longTimeStatistic[dateNow] = {learnedWords:learnedWords, optional: {sprint: optionalForLongStat.sprint,
+      // audioCall: optionalForLongStat.audioCall,
+      // book: optionalForLongStat.book,
+      // arrLearnedWords: optionalForLongStat.arrLearnedWords,
+      // date: optionalForLongStat.date}}
+      optional.longTimeStatistic[dateNow] = {learnedWords:learnedWords}
 
-      getUserStatistic(userID, userToken).then(res => console.log(res))
-      console.log(optional)
       changeUserStatistic(userID, userToken, learnedWords, optional);
 
       getUserWords(userID, userToken).then(words=> {
         userWords = (words as WordType[]).map(el=>el);
         setUserWords(userWords);
+        getUserStatistic(userID, userToken).then(() => {
+
+          arrUserWordsID = userWords.map(el => {return el.wordId});        
+      
+          mistakenWords.map(wordID => {
+            if(arrUserWordsID.includes(wordID)){
+              changeUserWord(userID, wordID, 'simple', 1, userToken)
+            }          
+          });
+
+          rightWords.map(wordID => {
+            console.time('start');
+            if(arrUserWordsID.includes(wordID)) {
+              const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
+              +repeatWord < 2?
+              changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
+              : changeUserWord(userID, wordID, 'easy', 3, userToken);            
+            } else { 
+              console.timeEnd('start');                  
+              createUserWord(userID, wordID, 'simple', 1, userToken)
+            }
+          })
+        }); 
       });
-
-      getUserStatistic(userID, userToken).then(() => {
-
-        arrUserWordsID = userWords.map(el => {return el.wordId});        
-    
-        mistakenWords.map(wordID => {
-          if(arrUserWordsID.includes(wordID)){
-            changeUserWord(userID, wordID, 'simple', 1, userToken)
-          }          
-        });
-        
-        rightWords.map(wordID => {
-          if(arrUserWordsID.includes(wordID)) {
-            const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
-            +repeatWord < 2?
-            changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
-            : changeUserWord(userID, wordID, 'easy', 3, userToken);            
-          } else {
-            createUserWord(userID, wordID, 'simple', 1, userToken)
-          }
-        })
-      });      
     })
   }
 
@@ -248,7 +233,7 @@ function GameSprint(props:Props) {
         <h2 className={styles.gamePoints}>Количество баллов: {points}</h2>
         <div className={styles.gameWindow}>
           <div className={styles.gameMarks}>
-          <Circle n={3} count={countLearnedWords} arrMistaken={mistakenWords} arrRight={rightWords}/>
+          <Circle n={3} count={countLearnedWords} arrMistaken={mistakenWords} arrRight={rightWords} doMistake={doMistake}/>
           </div>          
           <h3 className={styles.gameEnglishWord}>{wordInCard}</h3>          
           <h4 className={styles.gameRussianWord}>{wordTranslatedInCard}</h4>

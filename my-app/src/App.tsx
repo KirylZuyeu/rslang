@@ -25,28 +25,6 @@ function App() {
 		setIsAvtorization(true);
 	}
 
-	if (localStorage.getItem('a')  && isAvtorization) {
-		const user = localStorage.getItem('a') as string;
-		const userID = JSON.parse(user).userId;
-		const userToken = JSON.parse(user).token;
-		getUserStatistic(userID , userToken).catch(() => changeUserStatistic(userID , userToken, 0, objStatisticZero))
-		const statistic = getUserStatistic(userID, userToken);    
-
-		statistic.then(result => { 
-			console.log(result);   
-		  let learnedWords = result.learnedWords as number;      
-		  let optional = result.optional as OptionStatistics;
-		  const dateNow = Date().split(' ').slice(1,4).join(' ');
-		  const datePrev = optional.date? optional.date : null;
-		  if (dateNow !== datePrev) {
-			learnedWords = 0;
-			optional = objStatisticZero;
-		  }
-		})
-	}
-
-	{ console.log('isAvtorization+++', isAvtorization,) }
-
   return (
 		<Context.Provider value={{ isAvtorization, setIsAvtorization }}>
 			<BrowserRouter>

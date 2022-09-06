@@ -20,6 +20,9 @@ export default function Cabinet() {
 			localStorage.removeItem('t');
 			navigate('/come-in');
 		}
+		if(!response.ok && response.status === 404) {
+			console.log('40')
+		}
 		return response;
 	};
 

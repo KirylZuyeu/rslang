@@ -6,7 +6,7 @@ export default function Picture(props: { word: Word, show: boolean }) {
 	return (
 		<>
 		<div style={{ backgroundImage: props.show ? `url(${picLink})` : '' }} className={styles.picture} ></div>
-			<p className={styles.text}>{props.show ? props.word.transcription : ' '}</p>
+			<p className={styles.text}>{props.show ? props.word.wordTranslate : ' '}</p>
 		</>
 	)
 }

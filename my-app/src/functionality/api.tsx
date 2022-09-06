@@ -236,7 +236,10 @@ export const changeUserStatistic = async (id: string, token: string, num: number
 		),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 	})
-	.then(res => res.json())
+	// .then(res => {console.log(res.json());
+	// 	// return res.json()
+	// }
+	// )
 
 //================Users Setting=======================
 

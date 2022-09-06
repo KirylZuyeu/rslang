@@ -1,6 +1,6 @@
 import { RefObject, useContext, useEffect, useRef, useState } from "react";
 import { Context, ContextUser } from "../../Context";
-import { createUserWord, getUserWords, getWords, RespSign, UserWord } from "../../functionality/api";
+import { changeUserWord, createUserWord, getUserWord, getUserWords, getWords, RespSign, UserWord } from "../../functionality/api";
 import { Word } from "../mini-game/call/Speaker/PlayCall";
 import style from "./learn.module.css";
 
@@ -8,7 +8,7 @@ function Learnwords() {
 	const [group, setGroup] = useState(0);
 	const [page, setPage] = useState(0);
 	const [words, setWords] = useState([] as Word[]);
-	// const [userWords, setUserWords] = useState([] as UserWord[]);
+	const [userWords, setUserWords] = useState([] as UserWord[]);
 	const [userWordsEasy, setUserWordsEasy] = useState([] as string[]);
 	const [userWordsHard, setUserWordsHard] = useState([] as string[]);
 	const [urlArr, setUrlArr] = useState([] as string[]);
@@ -80,13 +80,12 @@ function Learnwords() {
 
 
 
-	async function addEseWord() {
-		const userWords = [] as string[]
-		await getUserWords(userData.userId, userData.token).then(res => userWords.push(res.forEach((el: UserWord) => {
-			userWords.push(el.id)
-		})))
-		console.log(userWords);
-
+	function addEseWord() {
+		getUserWord(userData.userId, words[activCard].id, userData.token)
+			.then(() => changeUserWord(userData.userId, words[activCard].id,
+				'easy', 3, userData.token))
+			.catch(() => createUserWord(userData.userId, words[activCard].id,
+				'easy', 3, userData.token))
 	}
 
 	function addHardWord() {

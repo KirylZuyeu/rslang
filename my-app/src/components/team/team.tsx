@@ -8,6 +8,10 @@ export default function Team() {
 				<h2 className={styles.title}>Kiryl</h2>
 				<div className={styles.photo_kiryl}></div>
 				<div className={styles.text}>
+					<ul>
+						<li>Дополнительный функционал</li>
+						<li>Создание копии бэкенда</li>
+					</ul>
 				</div>
 				<Link to={'https://github.com/KirylZuyeu'} className={styles.link}>Kiryl GitHub</Link>
 			</div>
@@ -19,7 +23,6 @@ export default function Team() {
 						<li>Мини-игра "Спринт"</li>
 						<li>Прогресс изучения</li>
 						<li>Страница статистики</li>
-						<li>Дополнительный функционал</li>
 					</ul>
 				</div>
 				<Link to={'https://github.com/katusha-2010'} className={styles.link}>Katya GitHub</Link>

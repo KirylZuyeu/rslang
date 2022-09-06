@@ -11,20 +11,20 @@ export default function Statistics() {
 		useState({ learnedWords: 0, optional: objStatisticZero, longTimeStatistic: {} } as Statistic)
 	const appContext = useContext(Context);
 
-// const navigate = useNavigate();
+const navigate = useNavigate();
 
-// const { fetch: originalFetch } = window;
-// window.fetch = async (...args) => {
-// 	let [resource, config] = args;
-// 	let response = await originalFetch(resource, config);
-// 	if (!response.ok && response.status === 401) {
-// 		appContext?.setIsAvtorization(false);
-// 		localStorage.removeItem('a');
-// 		localStorage.removeItem('t');
-// 		navigate('/come-in');
-// 	}
-// 	return response;
-// };
+const { fetch: originalFetch } = window;
+window.fetch = async (...args) => {
+	let [resource, config] = args;
+	let response = await originalFetch(resource, config);
+	if (!response.ok && response.status === 401) {
+		appContext?.setIsAvtorization(false);
+		localStorage.removeItem('a');
+		localStorage.removeItem('t');
+		navigate('/come-in');
+	}
+	return response;
+};
 
 	const user = JSON.parse(localStorage.getItem('a') as string) as RespSign;
 
@@ -32,7 +32,7 @@ export default function Statistics() {
 		if(user && getUserStatistic(user.userId, user.token) === undefined) {
 			changeUserStatistic(user.userId, user.token, 0, objStatisticZero)			
 		}
-	}, [statistic])
+	}, [])
 
 	const userStatistics = user ? (getUserStatistic(user.userId, user.token) !== undefined
 		? getUserStatistic(user.userId, user.token)
@@ -42,6 +42,7 @@ export default function Statistics() {
 			let learnedWords = res.learnedWords as number;      
 			let optional = res.optional;
 			const longTimeStatPrev = res.optional.longTimeStatistic as Record<string, Statistic>;
+			// const dateNow = "Sep 07 2022";
 			const dateNow = Date().split(' ').slice(1,4).join(' ');
 			const datePrev = optional.date? optional.date : null;
 			

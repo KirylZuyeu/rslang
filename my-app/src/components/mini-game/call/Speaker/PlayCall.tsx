@@ -136,7 +136,6 @@ export default function PlayCall(props: PropsWord) {
 			let longTimeStatPrev = result.optional.longTimeStatistic as Record<string, Statistic>;
 			if (longTimeStatPrev === undefined) { longTimeStatPrev = {} }
 
-			// const dateNow = "Sep 06 2022";
 			const dateNow = Date().split(' ').slice(1, 4).join(' ');
 			const datePrev = optional.date ? optional.date : null;
 
@@ -146,21 +145,6 @@ export default function PlayCall(props: PropsWord) {
 				optional.longTimeStatistic = longTimeStatPrev;
 			}
 			const arrLearnedWordsPrev = optional.arrLearnedWords.arr;
-
-      // const arrRightForDict = [] ///массив долгосрочных всех правильных
-
-			// for (let myProp in longTimeStatPrev) {
-			//   let key = myProp as keyof typeof longTimeStatPrev;
-			//   let value = longTimeStatPrev[key];
-			//   arrRightForDict.push(value)
-			//   console.log(value);
-			// }
-
-			// const arrRightAllServer = [{ id: 'el1', 'count': 1 }, { id: 'el2', 'count': 3 }];
-			//       const arrRightAll = rightWords.map(el => {
-			//           arrRightAllServer.find(obj => obj.id == el)
-			//           return { 'id': el, 'count': 1 }
-			//       })
 
 			const allWordsInGame = [...arrFalse, ...arrRight];
 			const updatedArrLearnedWords = [...arrLearnedWordsPrev, ...allWordsInGame].filter((el, i) =>
@@ -184,43 +168,42 @@ export default function PlayCall(props: PropsWord) {
 			optional.arrLearnedWords.arr = updatedArrLearnedWords;
 			optional.date = dateNow;
 			learnedWords = updatedArrLearnedWords.length;
-			const optionalForLongStat = optional;
-			optional.longTimeStatistic[dateNow] = {
-				learnedWords: learnedWords, optional: {
-					sprint: optionalForLongStat.sprint,
-					audioCall: optionalForLongStat.audioCall,
-					book: optionalForLongStat.book,
-					arrLearnedWords: optionalForLongStat.arrLearnedWords,
-					date: optionalForLongStat.date
-				}
-			}
-
-			getUserStatistic(userID, userToken).then(res => console.log(res))			
+			// const optionalForLongStat = Object.assign({}, optional);
+			// optional.longTimeStatistic[dateNow] = {
+			// 	learnedWords: learnedWords, optional: {
+			// 		sprint: optionalForLongStat.sprint,
+			// 		audioCall: optionalForLongStat.audioCall,
+			// 		book: optionalForLongStat.book,
+			// 		arrLearnedWords: optionalForLongStat.arrLearnedWords,
+			// 		date: optionalForLongStat.date
+			// 	}
+			// }
+			optional.longTimeStatistic[dateNow] = {learnedWords:learnedWords}
+	
 			changeUserStatistic(userID, userToken, learnedWords, optional);
 
 			getUserWords(userID, userToken).then(words => {
 				userWords = (words as WordType[]).map(el => el);
 				setUserWords(userWords);
-			});
-
-			getUserStatistic(userID, userToken).then(() => {
-				arrUserWordsID = userWords.map(el => { return el.wordId });
-				arrFalse.map(wordID => {
-					if (arrUserWordsID.includes(wordID)) {
-						changeUserWord(userID, wordID, 'simple', 1, userToken)
-					}
+				getUserStatistic(userID, userToken).then(() => {
+					arrUserWordsID = userWords.map(el => { return el.wordId });
+					arrFalse.map(wordID => {
+						if (arrUserWordsID.includes(wordID)) {
+							changeUserWord(userID, wordID, 'simple', 1, userToken)
+						}
+					});
+	
+					arrRight.map(wordID => {
+						if (arrUserWordsID.includes(wordID)) {
+							const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
+							+repeatWord < 2 ?
+								changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
+								: changeUserWord(userID, wordID, 'easy', 3, userToken);
+						} else {
+							createUserWord(userID, wordID, 'simple', 1, userToken)
+						}
+					})
 				});
-
-				arrRight.map(wordID => {
-					if (arrUserWordsID.includes(wordID)) {
-						const repeatWord = userWords.find(obj => obj.wordId === wordID)?.optional.repeat as number;
-						+repeatWord < 2 ?
-							changeUserWord(userID, wordID, 'simple', (+repeatWord + 1), userToken)
-							: changeUserWord(userID, wordID, 'easy', 3, userToken);
-					} else {
-						createUserWord(userID, wordID, 'simple', 1, userToken)
-					}
-				})
 			});
 		})
 	}

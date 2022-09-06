@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../../Context';
-import { createUser, RespSign, signIn } from '../../functionality/api';
+import { changeUserStatistic, createUser, objStatisticZero, signIn } from '../../functionality/api';
 
 import styles from "./autorization.module.css";
 
@@ -31,10 +31,10 @@ export default function Autorization() {
 			email: data.Email,
 			password: data.Password
 		})
-			.then(result => console.log(result))
+			.then(result => {localStorage.setItem('first', JSON.stringify(false))})
 			.catch(err => console.log('repeat registration', err))
 		reset()
-		setisAvtorize(false)
+		setisAvtorize(false);		
 	}
 
 	function onSubmitIn(data: FormValues) {		
@@ -42,12 +42,15 @@ export default function Autorization() {
 			email: data.Email,
 			password: data.Password
 		})
-			.then(res => {				
+			.then((res) => {
+				if(JSON.parse(localStorage.getItem('first') as string) === false) {
+					changeUserStatistic(res.userId , res.token, 0, objStatisticZero).then(()=> localStorage.setItem('first', JSON.stringify(true)))
+				}			
 					setIsin(true);
 					localStorage.setItem('a', JSON.stringify(res))
 					const date = Date.now();
 					console.log("---------------", date);
-				localStorage.setItem('t', JSON.stringify(date))				
+				localStorage.setItem('t', JSON.stringify(date))			
 			})
 			.catch(() => setError(true))
 	}

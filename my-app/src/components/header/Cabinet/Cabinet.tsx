@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../../../Context";
 import { changeUserStatistic, checkToken, createUserWord, delUserWord, getNewUserToken, getUser, getUserStatistic, getUserWords, objStatisticZero, RespSign, WordType } from "../../../functionality/api";
 import styles from "./cabinet.module.css";
-import { useLocation, useParams } from "react-router"
 
 export default function Cabinet() {
 	const [userData, setUserData] = useState({} as RespSign)
+	const [token, setToken] = useState('' as string)
+	const [refreshTok, setRefreshTok] = useState('' as string)
 	const appContext = useContext(Context);
 	const navigate = useNavigate();
 
@@ -14,12 +15,14 @@ export default function Cabinet() {
 	window.fetch = async (...args) => {
 		let [resource, config] = args;
 		let response = await originalFetch(resource, config);
+
 		if (!response.ok && response.status === 401) {
-			appContext?.setIsAvtorization(false);
-			localStorage.removeItem('a');
-			localStorage.removeItem('t');
-			navigate('/come-in');
-		}		
+			getNewUserToken(userData.userId, refreshTok).then(res => {
+				localStorage.setItem('token', JSON.stringify(res.token))
+				localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken))
+			})
+			exit()
+		}
 		return response;
 	};
 
@@ -27,16 +30,18 @@ export default function Cabinet() {
 		appContext?.setIsAvtorization(false);
 		localStorage.removeItem('a');
 		localStorage.removeItem('t');
+		localStorage.removeItem('token');
+		localStorage.removeItem('refreshToken');
 		navigate('/');
 	}
 
 	function user() {
 		console.log(2, checkToken());		
-		getUser("63028e49e73afb00165213c1", userData.token).then(res => console.log(res));
+		getUser(userData.userId, userData.token).then(res => console.log(res));
 	}
 
 	function statistic() {
-		getUserStatistic("63028e49e73afb00165213p1", userData.token).then(res => console.log(res))
+		getUserStatistic(userData.userId, userData.token).then(res => console.log(res))
 	}
 
 	function refreshToken() {
@@ -46,8 +51,14 @@ export default function Cabinet() {
 
 	useEffect(() => {
 		console.log(111111111);
+		const refreshTok = localStorage.getItem('refreshToken')
+		const tok = localStorage.getItem('token')
 		const a = localStorage.getItem('a')
 		setUserData(a ? JSON.parse(a) : 'aa');
+		setToken(tok ? JSON.parse(tok) : 'tok')
+		setRefreshTok(refreshTok ? JSON.parse(refreshTok) : 'refreshTok')
+		console.log(token, refreshTok, '///to//');
+
 	}, [appContext?.isAvtorization])
 
 	// useEffect(() => {

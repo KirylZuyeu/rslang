@@ -163,3 +163,46 @@
 	padding: 5px;
 	cursor: pointer;
 }
+
+.simple{
+	background-color: rgb(143, 202, 254);
+	width: 30px;
+	height: 10px;	
+}
+
+.easy{
+	background-color: rgb(130, 255, 199);
+	width: 30px;
+	height: 10px;
+}
+
+.hard{
+	background-color: rgb(196, 102, 251);
+	width: 30px;
+	height: 10px;
+}
+
+.game_link{
+	margin: 20px auto;
+	display: flex;
+	justify-content: center;
+	width: 90%;
+}
+
+.sprint_link{
+	width: 100px;
+	background: url(../../images/jpg/sprint_pic.jpg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 60px;
+	cursor: pointer;
+}
+
+.call_link{
+	width: 100px;
+	background: url(../../images/jpg/audio_call.jpg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 60px;
+	cursor: pointer;
+}

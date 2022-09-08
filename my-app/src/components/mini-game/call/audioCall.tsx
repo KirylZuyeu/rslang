@@ -17,15 +17,11 @@ function AudioCall() {
 		const rand = Math.floor(Math.random() * 30) + 1;
 		const res = getWords(num, rand);
 		res.then(
-			(result) => {
-				let res
-				if (result.length > 10) {
-					res = result.slice(0, 10);
-				} else {
-					res = result;
-				}
+			(result) => {				
+				console.log(result);
+
 				setIsLoaded(true);
-				setWords(res);
+				setWords(result);
 			},
 			(error) => {
 				setError(error);

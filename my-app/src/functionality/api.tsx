@@ -184,14 +184,14 @@ export const getUserWord = async (userId: string, wordId: string, token: string)
 	})).json();
 
 export const changeUserWord = async (userId: string, wordId: string, group: string, repeat:number, token: string) =>
-	(await fetch(`${users}/${userId}/words/${wordId}`, {
+	await fetch(`${users}/${userId}/words/${wordId}`, {
 		method: 'PUT',
 		body: JSON.stringify({
 			difficulty: group,
 			optional: {repeat}
 		}),
 		headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-	})).json()
+	})
 
 
 export const delUserWord = async (userId: string, wordId: string, token: string) =>
@@ -203,11 +203,13 @@ export const delUserWord = async (userId: string, wordId: string, token: string)
 //============Users AggregatedWords========================
 
 export const getUsersAggregatedWords =
-	async (id: string, token: string, page: number = 1, wordsPerPage: number = 1, group: string = '') =>
-		(await fetch(`${users}/${id}/aggregatedWords?page=${page}&wordsPerPage=${wordsPerPage}&group=${group}`, {
+	async (id: string, token: string, page: number = 0, wordsPerPage: number = 1, group: string = '', filter: {} = {}) => {
+		const filterObj = JSON.stringify(filter)
+		return (await fetch(`${users}/${id}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=${wordsPerPage}&filter=${filterObj}`, {
 			method: 'GET',
 			headers: { 'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-		})).json();
+		}))
+	};
 
 export const getUsersAggregatedWord = async (userId: string, wordId: string, token: string) =>
 	(await fetch(`${users}/${userId}/aggregatedWords/${wordId}`, {

@@ -7,7 +7,8 @@ import { changeUserStatistic, getUserStatistic, objStatisticZero, RespSign, Stat
 import styles from "./statistic.module.css";
 
 export default function Statistics() {
-	const [statistic, setStatistic] = useState({learnedWords:0, optional:objStatisticZero, longTimeStatistic: {}} as Statistic)
+	const [statistic, setStatistic] =
+		useState({ learnedWords: 0, optional: objStatisticZero, longTimeStatistic: {} } as Statistic)
 	const appContext = useContext(Context);
 
 const navigate = useNavigate();
@@ -33,7 +34,9 @@ window.fetch = async (...args) => {
 		}
 	}, [])
 
-	const userStatistics = user? (getUserStatistic(user.userId, user.token) !== undefined? getUserStatistic(user.userId, user.token) : changeUserStatistic(user.userId, user.token, 0, objStatisticZero)) : new Promise(()=> {});
+	const userStatistics = user ? (getUserStatistic(user.userId, user.token) !== undefined
+		? getUserStatistic(user.userId, user.token)
+		: changeUserStatistic(user.userId, user.token, 0, objStatisticZero)) : new Promise(() => { });
 	useEffect (() => {		
 		userStatistics.then(res => {
 			let learnedWords = res.learnedWords as number;      
@@ -78,18 +81,19 @@ window.fetch = async (...args) => {
 				<div className={styles.game_sprint}>
 					<h3>Cпринт</h3>
 					<h4>Пройдено новых слов: {statistic.optional.sprint.arrLearnedWords.length}</h4>
-							<h4>Правильных ответов: {statistic.optional.sprint.sumAll === 0 ? 0 : Math.round(statistic.optional.sprint.sumRight / statistic.optional.sprint.sumAll * 100)} %</h4>
+							<h4>Правильных ответов: {statistic.optional.sprint.sumAll === 0 ? 0
+								: Math.round(statistic.optional.sprint.sumRight / statistic.optional.sprint.sumAll * 100)} %</h4>
 					<h4>Самая длинная серия правильных ответов: {statistic.optional.sprint.period}</h4>
 				</div>
 				<div className={styles.game_audioCall}>
 				    <h3>Аудиовызов</h3>
 					<h4>Пройдено новых слов: {statistic.optional.audioCall.arrLearnedWords.length}</h4>
-							<h4>Правильных ответов: {statistic.optional.audioCall.sumAll === 0 ? 0 : Math.round(statistic.optional.audioCall.sumRight / statistic.optional.audioCall.sumAll * 100)} %</h4>
+							<h4>Правильных ответов: {statistic.optional.audioCall.sumAll === 0 ? 0
+								: Math.round(statistic.optional.audioCall.sumRight / statistic.optional.audioCall.sumAll * 100)} %</h4>
 					<h4>Самая длинная серия правильных ответов: {statistic.optional.audioCall.period}</h4>
 				</div>
 			</div>
-		  </section>
-
+				</section>
 		  {statistic.optional.longTimeStatistic ? 
 			<section className={styles.statistic_all_wrapper}>
 				<ChartBar settings={statistic}/>

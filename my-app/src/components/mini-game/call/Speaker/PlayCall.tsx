@@ -23,7 +23,7 @@ export type Word = {
 }
 
 export type PropsWord = {
-	words: SetStateAction<Word[]>
+	words: Word[]
 	fu: Dispatch<SetStateAction<boolean>>
 	resetWords: Dispatch<SetStateAction<never[]>>
 }
@@ -43,7 +43,28 @@ export default function PlayCall(props: PropsWord) {
 	let [userWords, setUserWords] = useState([] as WordType[]);
 
 	useEffect(() => {
-		setWords(props.words)
+		let arr = props.words
+		if (arr.length) {
+			if (arr.length > 10) {
+				console.log('10', arr);
+				const randomize = (array: Word[], n: number) => {
+					var final = [];
+					const array2 = array.filter(function (elem, index, self) {
+						return index == self.indexOf(elem);
+					}).sort(function () { return 0.5 - Math.random() });
+
+					var len = array.length,
+						n = n > len ? len : n;
+
+					for (var i = 0; i < n; i++) {
+						final[i] = array[i];
+					}
+					return final;
+				}
+				arr = randomize(arr, 10)
+			}
+		}
+		setWords(arr)
 	}, [props.words])
 
 

@@ -4,11 +4,13 @@ import { RefObject, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { resourceLimits } from "worker_threads";
 import { Context, ContextUser } from "../../Context";
-import { changeUserWord, createUserWord, getUsersAggregatedWord, getUsersAggregatedWords, getUserWord, getUserWords, getWords, RespSign, UserWord } from "../../functionality/api";
+import { changeUserWord, createUserWord, getUsersAggregatedWord, getUsersAggregatedWords, getUserWord, getUserWords, getWord, getWords, RespSign, UserWord } from "../../functionality/api";
+import AudioCall from "../mini-game/call/audioCall";
+import PlayCall, { Word } from "../mini-game/call/Speaker/PlayCall";
 
 import style from "./learn.module.css";
 
-type WordUser = {
+export type WordUser = {
 	audio: string
 	audioExample: string
 	audioMeaning: string
@@ -44,11 +46,15 @@ function Learnwords() {
 	const [flagEasy, setFlagEasy] = useState(false);
 	const [page, setPage] = useState(0);
 	const [words, setWords] = useState([] as WordUser[]);
+	const [wordsPlay, setWordsPlay] = useState([]);
 	const [urlArr, setUrlArr] = useState([] as string[]);
 	let [count, setCount] = useState(0);
 	const [activCard, setActivCard] = useState(1);
 	const [userData, setUserData] = useState({} as RespSign)
+	const [isLoaded, setIsLoaded] = useState(false);
 	const [userTok, setUserTok] = useState('')
+	const [startCall, setStartCall] = useState(true);
+	const [error, setError] = useState(null);
 	const appContext = useContext(Context)
 	const audioPlayer = useRef() as RefObject<HTMLAudioElement>;
 
@@ -58,7 +64,13 @@ function Learnwords() {
 	useEffect(() => {
 		console.log(userData);
 		if (userData.token) {
-			console.log('===============');
+			console.log('===============');			
+			getWords(group, page)
+				.then(res => {
+					console.log('rrrrrrrr', res);
+					setIsLoaded(true); setWordsPlay(res)
+				})
+				.catch(err => setError(err))
 
 			getUsersAggregatedWords(userData.userId, userData.token, page, 20, `${group}`
 			/* { "$and": [{ "word": "duck" }] } */).then(result => result.json()).then(res => {
@@ -68,9 +80,6 @@ function Learnwords() {
 				});
 			});
 		}
-
-
-
 		// getWords(group, page).then(res => setWords(res))
 	}, [group, page, flagHard, flagEasy])
 
@@ -93,6 +102,12 @@ function Learnwords() {
 		setUserData(a ? JSON.parse(a) : 'aa')
 		setUserTok(tok ? JSON.parse(tok) : 'token')
 		if (userData) {
+			getWords(group, page)
+				.then(res => {
+					console.log('rrrrrrrr', res);
+					setIsLoaded(true); setWordsPlay(res)
+				})
+				.catch(err => setError(err))
 			getUsersAggregatedWords(user.userId, user.token, page, 20, `${group}`
 			/* { "$and": [{ "word": "duck" }] } */).then(result => result.json()).then(res => {
 				res.forEach((element: any) => {
@@ -174,10 +189,12 @@ function Learnwords() {
 		setFlagEasy(!flagEasy)
 		setFlagHard(!flagHard)
 	}
+	console.log(!isLoaded, !wordsPlay.length, wordsPlay);
 
 	return (
 		<div className={style.dictionary}>
-			<h2 className={style.title}>Учебник</h2>
+			{startCall ?
+				<><h2 className={style.title}>Учебник</h2>
 			<div className={style.level}>
 				<h3 className={style.title_litle}>Уровень сложности</h3>
 				<div className={style.btn_wrapper}>
@@ -230,9 +247,10 @@ function Learnwords() {
 							{words[activCard - 1].textMeaningTranslate}
 						</p>
 						<div className={style.game_link}>
-							<Link to={'/mini-game/sprint'} className={style.sprint_link}>
-							</Link>
-							<Link to={'/mini-game/audio-call'} className={style.call_link}>
+									<div className={style.call_link} onClick={() => setStartCall(false)}>
+
+									</div>
+									<Link to={'/mini-game/audio-call'} className={style.sprint_link}>
 							</Link>
 						</div>
 					</div>
@@ -248,6 +266,7 @@ function Learnwords() {
 					})}
 				</ul>
 			</div>
+				</> : error ? <div>Ошибка: {error}</div> : !isLoaded || !wordsPlay.length ? <div className={style.loading}>Загрузка...</div> : <PlayCall words={wordsPlay} fu={setStartCall} resetWords={setWordsPlay} />}
 		</div >
 	)
 }

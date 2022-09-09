@@ -71,16 +71,28 @@ function Learnwords() {
 					setIsLoaded(true); setWordsPlay(res)
 				})
 				.catch(err => setError(err))
-
-			getUsersAggregatedWords(userData.userId, userData.token, page, 20, `${group}`
-			/* { "$and": [{ "word": "duck" }] } */).then(result => result.json()).then(res => {
-				res.forEach((element: any) => {
-					setWords(res[0].paginatedResults)
-					console.log(element, 'rrrr', words);
+			if (appContext?.isAvtorization) {
+				getUsersAggregatedWords(userData.userId, userData.token, page, 20, `${group}`
+	/* { "$and": [{ "word": "duck" }] } */).then(result => result.json()).then(res => {
+					res.forEach((element: any) => {
+						setWords(res[0].paginatedResults)
+						console.log(element, 'rrrr', words);
+					});
 				});
-			});
+			} else {
+				console.log('rererereeeeeeeeeeee');
+
+				getWords(group, page)
+					.then(res => setWords(res))				
+			}
+		} else {
+			console.log('rererereeeeeeeeeeee');
+
+			getWords(group, page)
+				.then(res => setWords(res))
 		}
-		// getWords(group, page).then(res => setWords(res))
+
+
 	}, [group, page, flagHard, flagEasy])
 
 	useEffect(() => {
@@ -98,25 +110,31 @@ function Learnwords() {
 		const user = (a ? JSON.parse(a) : 'aa');
 		console.log(user);
 
-		const tok = localStorage.getItem('token')
-		setUserData(a ? JSON.parse(a) : 'aa')
-		setUserTok(tok ? JSON.parse(tok) : 'token')
+		const tok = localStorage.getItem('token');
+		setUserData(a ? JSON.parse(a) : 'aa');
+		setUserTok(tok ? JSON.parse(tok) : 'token');
 		if (userData) {
 			getWords(group, page)
 				.then(res => {
 					console.log('rrrrrrrr', res);
 					setIsLoaded(true); setWordsPlay(res)
 				})
-				.catch(err => setError(err))
-			getUsersAggregatedWords(user.userId, user.token, page, 20, `${group}`
-			/* { "$and": [{ "word": "duck" }] } */).then(result => result.json()).then(res => {
-				res.forEach((element: any) => {
-					setWords(res[0].paginatedResults)
-					console.log(element, 'rrrr@@', words);
-				});
-			});
+				.catch(err => setError(err));
+			if (appContext?.isAvtorization) {
+				getUsersAggregatedWords(user.userId, user.token, page, 20, `${group}`
+				/* { "$and": [{ "word": "duck" }] } */)
+					.then(result => result.json())
+					.then(res => {
+						res.forEach((element: any) => {
+							setWords(res[0].paginatedResults)
+							console.log(element, 'rrrr@@', words);
+						})
+					})
+			} else {
+				getWords(group, page)
+					.then(res => setWords(res))
+			}
 		}
-
 	}, [appContext?.isAvtorization])
 
 	const array = Array(30).fill(1);

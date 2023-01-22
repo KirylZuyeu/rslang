@@ -8,8 +8,12 @@ export default function Team() {
 				<h2 className={styles.title}>Kiryl</h2>
 				<div className={styles.photo_kiryl}></div>
 				<div className={styles.text}>
+					<ul>
+						<li>Дополнительный функционал</li>
+						<li>Создание копии бэкенда</li>
+					</ul>
 				</div>
-				<Link to={'https://github.com/KirylZuyeu'} className={styles.link}>Kiryl GitHub</Link>
+				<a href={'https://github.com/KirylZuyeu'} className={styles.link}>Kiryl GitHub</a>
 			</div>
 			<div className={styles.card}>
 				<h2 className={styles.title}>Katya</h2>
@@ -19,10 +23,9 @@ export default function Team() {
 						<li>Мини-игра "Спринт"</li>
 						<li>Прогресс изучения</li>
 						<li>Страница статистики</li>
-						<li>Дополнительный функционал</li>
 					</ul>
 				</div>
-				<Link to={'https://github.com/katusha-2010'} className={styles.link}>Katya GitHub</Link>
+				<a href={'https://github.com/katusha-2010'} className={styles.link}>Katya GitHub</a>
 			</div>
 			<div className={styles.card}>
 				<h2 className={styles.title}>Oleg</h2>
@@ -35,8 +38,8 @@ export default function Team() {
 						<li>Электронный учебник</li>
 					</ul>
 				</div>
-				<Link to={'https://github.com/Oleegg'} className={styles.link}>Oleg GitHub</Link>
-			</div>			
+				<a href={'https://github.com/Oleegg'} className={styles.link}>Oleg GitHub</a>
+			</div>
 		</div>
 	)
 }

@@ -46,7 +46,13 @@ export default function Autorization() {
 				if(JSON.parse(localStorage.getItem('first') as string) === false) {
 					changeUserStatistic(res.userId , res.token, 0, objStatisticZero).then(()=> localStorage.setItem('first', JSON.stringify(true)))
 				}			
-					setIsin(true);
+				setIsin(true);				
+				document.cookie = `refreshToken=${res.refreshToken}`;
+				// console.log(JSON.parse(document.cookie));
+
+
+				localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken))
+				localStorage.setItem('token', JSON.stringify(res.token))
 					localStorage.setItem('a', JSON.stringify(res))
 					const date = Date.now();
 					console.log("---------------", date);

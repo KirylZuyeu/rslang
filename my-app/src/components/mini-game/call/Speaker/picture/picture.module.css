@@ -1,0 +1,11 @@
+.picture{	
+	margin: 20px auto 5px;
+	width: 170px;
+	height: 130px;	
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.text{
+	height: 22px;
+}
